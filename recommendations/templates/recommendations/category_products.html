@@ -1,0 +1,34 @@
+{% extends 'recommendations/base.html' %}
+
+{% block title %}Products in {{ category.name }}{% endblock %}
+
+{% block content %}
+
+<h2 class="section-title">Category: {{ category.name }}</h2>
+
+{% if products %}
+<div class="product-grid">
+    {% for product in products %}
+    <div class="product-card">
+
+        <!-- Product Image -->
+        <img src="{{ product.image.url }}"
+             style="width: 100%; height: 180px; object-fit: cover; border-radius: 8px;">
+
+        <h3>{{ product.name }}</h3>
+        <p>{{ product.description|truncatewords:12 }}</p>
+
+        <div class="price">${{ product.price }}</div>
+
+        <a href="{% url 'product_detail' product.id %}" class="btn" style="margin-top:10px;">
+            View Details →
+        </a>
+    </div>
+    {% endfor %}
+</div>
+
+{% else %}
+<p>No products available in this category.</p>
+{% endif %}
+
+{% endblock %}

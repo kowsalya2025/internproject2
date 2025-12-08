@@ -1,0 +1,58 @@
+{% extends 'recommendations/base.html' %}
+{% block content %}
+
+<div id="csrf-token" style="display:none;">{% csrf_token %}</div>
+
+<div style="max-width: 500px; margin: 40px auto; padding: 30px; background: white; border-radius: 10px;">
+    <h2>Checkout</h2>
+    <p><strong>Product:</strong> {{ product.name }}</p>
+    <p><strong>Price:</strong> ₹{{ product.price }}</p>
+
+    <button id="rzp-button" class="btn btn-success" style="padding: 12px 25px;">Pay Now</button>
+</div>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+var options = {
+    "key": "{{ razorpay_key }}",
+    "amount": "{{ order.amount }}",
+    "currency": "INR",
+    "name": "SmartShop",
+    "description": "{{ product.name }}",
+    "order_id": "{{ order.id }}",
+
+    "handler": function (response){
+        // Get CSRF token
+        let csrf = document.querySelector('#csrf-token input').value;
+
+        var form = document.createElement('form');
+        form.method = "POST";
+        form.action = "{% url 'payment_handler' %}";
+
+        form.innerHTML = `
+            <input type="hidden" name="csrfmiddlewaretoken" value="${csrf}">
+            <input type="hidden" name="razorpay_order_id" value="{{ order.id }}">
+            <input type="hidden" name="razorpay_payment_id" value="${response.razorpay_payment_id}">
+            <input type="hidden" name="razorpay_signature" value="${response.razorpay_signature}">
+            <input type="hidden" name="product_id" value="{{ product.id }}">
+        `;
+
+        document.body.appendChild(form);
+        form.submit();
+    },
+
+    "theme": { "color": "#3399cc" }
+};
+
+var rzp = new Razorpay(options);
+
+document.getElementById('rzp-button').onclick = function(e){
+    rzp.open();
+    e.preventDefault();
+}
+</script>
+
+{% endblock %}
+
+
+

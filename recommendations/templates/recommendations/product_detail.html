@@ -1,0 +1,78 @@
+{% extends 'recommendations/base.html' %}
+
+{% block content %}
+
+<!-- PRODUCT IMAGE -->
+<div style="width: 100%; max-width: 700px; margin: auto;">
+    <img src="{{ product.image.url }}" 
+         alt="{{ product.name }}" 
+         style="width:100%; height:350px; object-fit:cover; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.1); margin-bottom:25px;">
+</div>
+
+<!-- PRODUCT DETAILS -->
+<div style="margin: 20px auto; max-width: 700px;">
+
+    <h1 style="font-size:2em;">{{ product.name }}</h1>
+    <p style="color: #666; margin: 10px 0; font-size:1.1em;">Category: {{ product.category.name }}</p>
+    <p style="margin: 15px 0;">{{ product.description }}</p>
+
+    <div class="price" style="font-size:1.6em; color:#2ecc71; font-weight:bold;">
+        ${{ product.price }}
+    </div>
+
+    <div class="rating" style="margin: 15px 0; font-size:1.2em;">
+        ⭐ {{ product.average_rating|floatformat:1 }}
+    </div>
+
+    {% if user.is_authenticated %}
+        <div style="margin: 20px 0;">
+            <h3>Rate this product:</h3>
+            <div style="margin: 10px 0;">
+                {% for i in "12345" %}
+                    <button class="btn" onclick="rateProduct({{ product.id }}, {{ i }})"
+                            style="padding: 5px 15px; margin: 3px; background:#f1f1f1;">
+                        {{ i }} ⭐
+                    </button>
+                {% endfor %}
+            </div>
+            {% if user_rating %}
+                <p>Your rating: <strong>{{ user_rating.score }} ⭐</strong></p>
+            {% endif %}
+        </div>
+
+        <form method="POST" action="{% url 'purchase_product' product.id %}" style="margin-top:20px;">
+            {% csrf_token %}
+
+         <a href="{% url 'checkout_page' product.id %}" class="btn btn-success">
+    Buy Now
+</a>
+
+        </form>
+    {% else %}
+        <p><a href="/accounts/login/">Login</a> to rate and purchase</p>
+    {% endif %}
+
+</div>
+
+<!-- RECOMMENDATIONS -->
+<h2 class="section-title">Recommended For You</h2>
+
+<div class="product-grid">
+    {% for rec in recommendations %}
+    <div class="product-card">
+        <img src="{{ rec.image.url }}" 
+             alt="{{ rec.name }}" 
+             style="width:100%; height:150px; object-fit:cover; border-radius:8px; margin-bottom:10px;">
+
+        <h3>{{ rec.name }}</h3>
+        <p>{{ rec.description|truncatewords:10 }}</p>
+        <div class="price">${{ rec.price }}</div>
+
+        <a href="{% url 'product_detail' rec.id %}" class="btn" style="margin-top:10px;">
+            View Details →
+        </a>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

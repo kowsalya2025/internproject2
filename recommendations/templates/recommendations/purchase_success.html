@@ -1,0 +1,40 @@
+{% extends 'recommendations/base.html' %}
+
+{% block title %}Purchase Successful - SmartShop{% endblock %}
+
+{% block content %}
+<div style="background: white; padding: 50px; border-radius: 12px; margin: 50px auto; max-width: 600px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+    <div style="font-size: 4em; margin-bottom: 20px;">✅</div>
+    <h1 style="color: #27ae60; margin-bottom: 15px;">Purchase Successful!</h1>
+    <p style="font-size: 1.2em; color: #666; margin-bottom: 30px;">
+        Thank you for purchasing <strong>{{ product.name }}</strong>
+    </p>
+    
+    <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
+        <p style="color: #666; margin-bottom: 10px;">Order Details</p>
+        <p style="font-size: 1.3em; color: #2c3e50;"><strong>{{ product.name }}</strong></p>
+        <p style="font-size: 1.5em; color: #27ae60; font-weight: bold; margin-top: 10px;">${{ product.price }}</p>
+    </div>
+    
+    <div style="margin: 30px 0;">
+        <a href="/" class="btn" style="margin: 0 10px;">Continue Shopping</a>
+        <a href="{% url 'my_recommendations' %}" class="btn btn-success" style="margin: 0 10px;">View Recommendations</a>
+    </div>
+</div>
+
+{% if recommendations %}
+<h2 class="section-title">🎁 Customers Also Bought</h2>
+<div class="product-grid">
+    {% for rec in recommendations %}
+    <div class="product-card">
+        <h3>{{ rec.name }}</h3>
+        <span class="category">{{ rec.category.name }}</span>
+        <p>{{ rec.description|truncatewords:12 }}</p>
+        <div class="rating">⭐ {{ rec.average_rating|floatformat:1 }}</div>
+        <div class="price">${{ rec.price }}</div>
+        <a href="{% url 'product_detail' rec.id %}" class="btn">View Details →</a>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends 'recommendations/base.html' %}
+
+{% block title %}Login - SmartShop{% endblock %}
+
+{% block content %}
+<div style="max-width: 450px; margin: 60px auto; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+    <h2 style="text-align: center; color: #2c3e50; margin-bottom: 30px;">🔐 Login to Your Account</h2>
+    
+    {% if form.errors %}
+    <div class="alert" style="background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; margin-bottom: 20px;">
+        <strong>⚠️ Error:</strong> Invalid username or password. Please try again.
+    </div>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        
+        <div style="margin-bottom: 20px;">
+            <label for="id_username" style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Username</label>
+            <input type="text" name="username" id="id_username" required 
+                   style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 6px; font-size: 1em;"
+                   placeholder="Enter your username">
+        </div>
+        
+        <div style="margin-bottom: 25px;">
+            <label for="id_password" style="display: block; margin-bottom: 8px; color: #2c3e50; font-weight: 500;">Password</label>
+            <input type="password" name="password" id="id_password" required 
+                   style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 6px; font-size: 1em;"
+                   placeholder="Enter your password">
+        </div>
+        
+        <button type="submit" class="btn btn-success" style="width: 100%; padding: 14px; font-size: 1.1em;">
+            Login →
+        </button>
+        
+        <input type="hidden" name="next" value="{{ next }}">
+    </form>
+    
+    <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; text-align: center; color: #666;">
+        <p style="margin-bottom: 15px;">Test accounts available:</p>
+        <p style="font-family: monospace; background: #f8f9fa; padding: 10px; border-radius: 6px; font-size: 0.9em;">
+            <strong>Username:</strong> user1, user2, ..., user10<br>
+            <strong>Password:</strong> password123
+        </p>
+        <p style="margin-top: 15px; font-size: 0.9em;">
+            Don't have an account? <a href="/" style="color: #3498db; font-weight: bold;">Browse as Guest</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

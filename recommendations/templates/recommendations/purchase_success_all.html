@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}Purchase Success{% endblock %}
+
+{% block content %}
+<div class="container mt-5 text-center">
+    <h2 class="text-success">Payment Successful!</h2>
+    <p>Your order has been placed successfully. 🎉</p>
+    <a href="{% url 'home' %}" class="btn btn-primary mt-3">Continue Shopping</a>
+    <a href="{% url 'my_recommendations' %}" class="btn btn-secondary mt-3">View Recommendations</a>
+</div>
+{% endblock %}
