@@ -1,11 +1,114 @@
-{% extends 'base.html' %}
+{% extends 'recommendations/base.html' %}
+
 {% block title %}Checkout{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <h2 class="mb-4">Checkout</h2>
+<style>
+    .checkout-container {
+        max-width: 700px;
+        margin: 50px auto;
+        padding: 40px;
+        background: #ffffff;
+        border-radius: 20px;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+    }
 
-    <h4>Total Amount: ₹{{ cart.total_amount }}</h4>
+    .checkout-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .checkout-header h2 {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 900;
+        font-size: 36px;
+        color: #333333;
+        margin-bottom: 10px;
+    }
+
+    .checkout-header p {
+        font-size: 16px;
+        color: #64748b;
+    }
+
+    .total-amount {
+        font-size: 24px;
+        font-weight: 800;
+        margin-bottom: 30px;
+        text-align: center;
+        color: #28a745;
+    }
+
+    /* Razorpay Button */
+    .razorpay-payment-button {
+        display: block !important;
+        width: 100% !important;
+        padding: 16px !important;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6) !important;
+        color: #fff !important;
+        font-weight: 900 !important;
+        font-size: 18px !important;
+        border-radius: 12px !important;
+        text-align: center !important;
+        cursor: pointer !important;
+        transition: all 0.3s ease !important;
+        border: none !important;
+        box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4) !important;
+    }
+
+    .razorpay-payment-button:hover {
+        transform: translateY(-3px) scale(1.02) !important;
+        box-shadow: 0 12px 32px rgba(99, 102, 241, 0.6) !important;
+    }
+
+    .back-btn {
+        display: block;
+        margin: 20px auto 0;
+        text-align: center;
+        padding: 14px 28px;
+        border-radius: 12px;
+        font-weight: 700;
+        color: #6366f1;
+        border: 2px solid #6366f1;
+        background: #fff;
+        transition: all 0.3s ease;
+        width: 100%;
+        max-width: 300px;
+        text-decoration: none;
+    }
+
+    .back-btn:hover {
+        background: #6366f1;
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(99, 102, 241, 0.3);
+    }
+
+    /* Responsive */
+    @media (max-width: 576px) {
+        .checkout-container {
+            padding: 30px 20px;
+        }
+
+        .checkout-header h2 {
+            font-size: 28px;
+        }
+
+        .total-amount {
+            font-size: 20px;
+        }
+    }
+</style>
+
+<div class="checkout-container">
+    <div class="checkout-header">
+        <h2>Secure Checkout</h2>
+        <p>Complete your purchase safely and quickly</p>
+    </div>
+
+    <div class="total-amount">
+        Total Amount: ₹{{ cart.total_amount }}
+    </div>
 
     <form id="razorpay-form" method="POST" action="{% url 'payment_handler_cart' %}">
         {% csrf_token %}
@@ -18,11 +121,11 @@
             data-buttontext="Pay Now"
             data-name="My Store"
             data-description="Purchase Products"
-            data-theme.color="#28a745"
+            data-theme.color="#6366f1"
         ></script>
-        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
     </form>
 
-    <a href="{% url 'cart_view' %}" class="btn btn-secondary mt-3">Back to Cart</a>
+    <a href="{% url 'cart' %}" class="back-btn">← Back to Cart</a>
 </div>
 {% endblock %}
+

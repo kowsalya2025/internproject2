@@ -1,34 +1,456 @@
 {% extends 'recommendations/base.html' %}
-
-{% block title %}Products in {{ category.name }}{% endblock %}
+{% load static %}
 
 {% block content %}
+<style>
+    .category-header {
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.95), rgba(139, 92, 246, 0.95));
+        padding: 48px 40px;
+        border-radius: 32px;
+        margin-bottom: 48px;
+        color: #fff;
+        box-shadow: 0 24px 60px rgba(99, 102, 241, 0.3);
+    }
 
-<h2 class="section-title">Category: {{ category.name }}</h2>
+    .category-title {
+        font-family: 'Poppins', sans-serif;
+        font-size: 48px;
+        font-weight: 900;
+        margin-bottom: 12px;
+    }
 
-{% if products %}
-<div class="product-grid">
-    {% for product in products %}
-    <div class="product-card">
+    .category-description {
+        font-size: 19px;
+        opacity: 0.95;
+        margin-bottom: 24px;
+    }
 
-        <!-- Product Image -->
-        <img src="{{ product.image.url }}"
-             style="width: 100%; height: 180px; object-fit: cover; border-radius: 8px;">
+    .category-badges {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+    }
 
-        <h3>{{ product.name }}</h3>
-        <p>{{ product.description|truncatewords:12 }}</p>
+    .category-badge {
+        background: rgba(255, 255, 255, 0.25);
+        backdrop-filter: blur(10px);
+        padding: 12px 24px;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 15px;
+    }
 
-        <div class="price">${{ product.price }}</div>
+    .content-layout {
+        display: grid;
+        grid-template-columns: 320px 1fr;
+        gap: 40px;
+    }
 
-        <a href="{% url 'product_detail' product.id %}" class="btn" style="margin-top:10px;">
-            View Details →
-        </a>
+    .filters-sidebar {
+        position: sticky;
+        top: 120px;
+        height: fit-content;
+    }
+
+    .filter-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        padding: 32px;
+        border-radius: 24px;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+
+    .filter-title {
+        font-family: 'Poppins', sans-serif;
+        font-size: 26px;
+        font-weight: 900;
+        margin-bottom: 32px;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .filter-section {
+        margin-bottom: 32px;
+    }
+
+    .filter-section h4 {
+        font-size: 17px;
+        font-weight: 800;
+        margin-bottom: 16px;
+        color: var(--dark);
+    }
+
+    .price-inputs {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 16px;
+        overflow: hidden;
+    }
+
+    .price-input {
+        flex: 1;
+        width: 20px;
+        padding: 10px 5px;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        font-size: 15px;
+        font-weight: 700;
+        outline: none;
+        transition: all 0.3s;
+       
+    }
+
+    .price-input:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+    }
+
+    .price-buttons {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .price-btn {
+        padding: 10px;
+        background: #f8fafc;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 700;
+        transition: all 0.3s;
+        color: var(--dark);
+    }
+
+    .price-btn:hover {
+        background: var(--primary);
+        color: #fff;
+        border-color: var(--primary);
+        transform: scale(1.05);
+    }
+
+    .sort-select {
+        width: 100%;
+        padding: 14px 18px;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        outline: none;
+        transition: all 0.3s;
+        background: #fff;
+    }
+
+    .sort-select:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 12px;
+    }
+
+    .btn-apply {
+        flex: 1;
+        padding: 14px;
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        color: #fff;
+        border: none;
+        border-radius: 12px;
+        font-weight: 800;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 15px;
+        box-shadow: 0 4px 16px rgba(99, 102, 241, 0.4);
+    }
+
+    .btn-apply:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(99, 102, 241, 0.6);
+    }
+
+    .btn-reset {
+        flex: 1;
+        padding: 14px;
+        background: #f8fafc;
+        color: var(--dark);
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        font-weight: 800;
+        text-decoration: none;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 15px;
+    }
+
+    .btn-reset:hover {
+        background: #e2e8f0;
+        transform: translateY(-2px);
+    }
+
+    .categories-list {
+        margin-top: 32px;
+        padding-top: 32px;
+        border-top: 2px solid #e2e8f0;
+    }
+
+    .category-item {
+        padding: 14px 18px;
+        background: #f8fafc;
+        color: var(--dark);
+        text-decoration: none;
+        border-radius: 12px;
+        font-weight: 700;
+        transition: all 0.3s;
+        font-size: 15px;
+        display: block;
+        margin-bottom: 12px;
+    }
+
+    .category-item:hover, .category-item.active {
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        color: #fff;
+        transform: translateX(8px);
+    }
+
+    .results-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 32px;
+        flex-wrap: wrap;
+        gap: 16px;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        padding: 24px 32px;
+        border-radius: 20px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    .results-count {
+        font-size: 22px;
+        font-weight: 800;
+        color: var(--dark);
+    }
+
+    .active-filters {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        padding: 12px 24px;
+        border-radius: 50px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    }
+
+    .active-filters-label {
+        font-size: 14px;
+        color: #64748b;
+        margin-right: 8px;
+    }
+
+    .active-filters-value {
+        font-weight: 800;
+        color: var(--primary);
+    }
+
+    .empty-state {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        padding: 80px 48px;
+        border-radius: 32px;
+        text-align: center;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    .empty-icon {
+        font-size: 80px;
+        margin-bottom: 24px;
+    }
+
+    .empty-title {
+        font-size: 28px;
+        font-weight: 900;
+        margin-bottom: 12px;
+        color: var(--dark);
+    }
+
+    .empty-description {
+        color: #64748b;
+        margin-bottom: 32px;
+        font-size: 17px;
+    }
+
+    .empty-action {
+        display: inline-block;
+        padding: 16px 40px;
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        color: #fff;
+        text-decoration: none;
+        border-radius: 50px;
+        font-weight: 800;
+        box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4);
+        transition: all 0.3s;
+    }
+
+    .empty-action:hover {
+        transform: translateY(-4px) scale(1.05);
+        box-shadow: 0 12px 32px rgba(99, 102, 241, 0.6);
+    }
+
+    @media (max-width: 992px) {
+        .content-layout {
+            grid-template-columns: 1fr;
+        }
+        .filters-sidebar {
+            position: static;
+        }
+    }
+    .item-image img {
+    width: 100%;
+    height: 250px;       /* fixed height */
+    object-fit: cover;   /* crop & fill container nicely */
+    border-radius: 20px;
+}
+
+</style>
+
+<!-- Category Header -->
+<div class="category-header">
+    <h1 class="category-title">{{ category.name }}</h1>
+    <p class="category-description">{{ category.description|default:"Discover amazing products in this category" }}</p>
+    <div class="category-badges">
+        <div class="category-badge">📦 {{ products.count }} Product{{ products.count|pluralize }}</div>
+        <div class="category-badge">⭐ Premium Quality</div>
+        <div class="category-badge">🚚 Free Shipping</div>
     </div>
-    {% endfor %}
 </div>
 
-{% else %}
-<p>No products available in this category.</p>
-{% endif %}
+<div class="content-layout">
+    <!-- Filters Sidebar -->
+    <div class="filters-sidebar">
+        <div class="filter-card">
+            <h3 class="filter-title">🎛️ Filters</h3>
+
+            <form method="GET" action="" id="filterForm">
+                <!-- Price Range -->
+                <div class="filter-section">
+                    <h4>💰 Price Range</h4>
+                    
+                    <div class="price-inputs">
+                        <input type="number" name="min_price" placeholder="Min" value="{{ min_price }}" class="price-input">
+                        <input type="number" name="max_price" placeholder="Max" value="{{ max_price }}" class="price-input">
+                    </div>
+                    
+                    <div class="price-buttons">
+                        <button type="button" onclick="setPriceRange(0, 50)" class="price-btn">Under $50</button>
+                        <button type="button" onclick="setPriceRange(50, 100)" class="price-btn">$50 - $100</button>
+                        <button type="button" onclick="setPriceRange(100, 200)" class="price-btn">$100 - $200</button>
+                        <button type="button" onclick="setPriceRange(200, 99999)" class="price-btn">$200+</button>
+                    </div>
+                </div>
+
+                <!-- Sort By -->
+                <div class="filter-section">
+                    <h4>📊 Sort By</h4>
+                    <select name="sort" onchange="this.form.submit()" class="sort-select">
+                        <option value="name" {% if sort_by == 'name' %}selected{% endif %}>Name (A-Z)</option>
+                        <option value="price_low" {% if sort_by == 'price_low' %}selected{% endif %}>Price: Low to High</option>
+                        <option value="price_high" {% if sort_by == 'price_high' %}selected{% endif %}>Price: High to Low</option>
+                        <option value="rating" {% if sort_by == 'rating' %}selected{% endif %}>Top Rated</option>
+                    </select>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button type="submit" class="btn-apply">Apply Filters</button>
+                    <a href="{% url 'category_products' category.id %}" class="btn-reset">Reset</a>
+                </div>
+            </form>
+
+            <!-- Categories List -->
+            <div class="categories-list">
+                <h4 style="margin-bottom: 16px; font-size: 17px; font-weight: 800;">🏷️ Categories</h4>
+                {% for cat in categories %}
+                <a href="{% url 'category_products' cat.id %}" 
+                   class="category-item {% if cat.id == category.id %}active{% endif %}">
+                    {{ cat.name }}
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Products Grid -->
+    <div>
+        <!-- Results Header -->
+        <div class="results-header">
+            <div class="results-count">
+                Showing {{ products.count }} product{{ products.count|pluralize }}
+            </div>
+            
+            {% if min_price or max_price %}
+            <div class="active-filters">
+                <span class="active-filters-label">Active Filters:</span>
+                <span class="active-filters-value">
+                    {% if min_price %}Min: ${{ min_price }}{% endif %}
+                    {% if max_price %}{% if min_price %} | {% endif %}Max: ${{ max_price }}{% endif %}
+                </span>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Products -->
+        {% if products %}
+        <div class="product-grid">
+            {% for product in products %}
+            <div class="product-card">
+               <div class="item-image">
+    {% if product.image %}
+        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+    {% else %}
+        <img src="{% static 'images/default.png' %}" alt="No Image">
+    {% endif %}
+</div>
+
+
+
+                <div class="product-content">
+                    <span class="category">{{ product.category.name }}</span>
+                    <h3>{{ product.name }}</h3>
+                    <p>{{ product.description|truncatewords:15 }}</p>
+                    <div class="rating">
+                        ⭐ {{ product.average_rating|floatformat:1 }}
+                        <span style="color: #94a3b8; font-size: 13px;">({{ product.rating_count }})</span>
+                    </div>
+                    <div class="price">₹{{ product.price }}</div>
+                    <a href="{% url 'product_detail' product.id %}" class="btn">View Details</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <!-- Empty State -->
+        <div class="empty-state">
+            <div class="empty-icon">🔍</div>
+            <h3 class="empty-title">No Products Found</h3>
+            <p class="empty-description">Try adjusting your filters or browse other categories</p>
+            <a href="{% url 'category_products' category.id %}" class="empty-action">Clear Filters</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+function setPriceRange(min, max) {
+    document.querySelector('input[name="min_price"]').value = min;
+    document.querySelector('input[name="max_price"]').value = max;
+    document.getElementById('filterForm').submit();
+}
+</script>
 
 {% endblock %}

@@ -1,88 +1,464 @@
 {% extends 'recommendations/base.html' %}
-
-{% block title %}Home - SmartShop{% endblock %}
+{% load static %}
 
 {% block content %}
-<div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 50px 30px; border-radius: 12px; margin: 30px 0; text-align: center;">
-    <h1 style="font-size: 2.5em; margin-bottom: 15px;">Welcome to SmartShop! 🎉</h1>
-    <p style="font-size: 1.2em; opacity: 0.95;">Discover products tailored just for you with AI-powered recommendations</p>
-</div>
+<style>
+    .hero-section {
+        background: linear-gradient(135deg, rgba(177, 177, 241, 0.95), rgba(87, 18, 224, 0.95));
+        color: #fff;
+        padding: 80px 32px;
+        border-radius: 32px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 48px;
+        box-shadow: 0 24px 60px rgba(99, 102, 241, 0.3);
+    }
 
-{% if user.is_authenticated %}
-<div class="alert alert-info">
-    <strong>👋 Hi {{ user.username }}!</strong> Check out our <a href="{% url 'my_recommendations' %}" style="color: #0056b3; font-weight: bold;">personalized recommendations</a> based on your interests!
-</div>
-{% else %}
-<div class="alert alert-info">
-    <strong>🔐 Please <a href="/accounts/login/" style="color: #0056b3; font-weight: bold;">login</a></strong> to get personalized product recommendations!<br>
-    <small>Test credentials: Username: user1, Password: password123</small>
-</div>
-{% endif %}
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+        background-size: 50px 50px;
+        animation: bgMove 30s linear infinite;
+    }
 
-<h2 class="section-title">✨ Featured Products</h2>
+    @keyframes bgMove {
+        0% { transform: translate(0, 0); }
+        100% { transform: translate(50px, 50px); }
+    }
 
-<div class="product-grid">
-    {% for product in products %}
-    <div class="product-card">
+    .hero-content { position: relative; z-index: 1; max-width: 1000px; margin: 0 auto; }
 
-        <!-- 🔥 PRODUCT IMAGE ADDED HERE -->
-        {% if product.image %}
-            <img src="{{ product.image.url }}" 
-                 alt="{{ product.name }}"
-                 style="width:100%; height:250px; object-fit:cover; border-radius:8px;">
-        {% endif %}
-        <!-- END IMAGE -->
+    .hero-title {
+        font-family: 'Poppins', sans-serif;
+        font-size: 64px;
+        font-weight: 900;
+        margin-bottom: 24px;
+        line-height: 1.1;
+        text-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        animation: fadeUp 0.8s ease;
+    }
 
-        <h3>{{ product.name }}</h3>
-        <span class="category">{{ product.category.name }}</span>
-        <p>{{ product.description|truncatewords:15 }}</p>
+    @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(40px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
 
-        <div class="rating">
-            {% if product.average_rating > 0 %}
-                ⭐ {{ product.average_rating|floatformat:1 }}
+    .hero-subtitle {
+        font-size: 22px;
+        margin-bottom: 40px;
+        opacity: 0.95;
+        animation: fadeUp 0.8s ease 0.2s backwards;
+        line-height: 1.6;
+    }
+
+    .hero-cta {
+        display: inline-flex;
+        gap: 20px;
+        animation: fadeUp 0.8s ease 0.4s backwards;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .cta-button {
+        padding: 18px 48px;
+        font-size: 17px;
+        font-weight: 800;
+        border-radius: 50px;
+        text-decoration: none;
+        transition: all 0.3s;
+        letter-spacing: 0.5px;
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+    }
+
+    .cta-primary {
+        background: #fff;
+        color: var(--primary);
+    }
+
+    .cta-primary:hover {
+        transform: translateY(-6px) scale(1.05);
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .cta-secondary {
+        background: transparent;
+        color: #fff;
+        border: 3px solid #fff;
+    }
+
+    .cta-secondary:hover {
+        background: #fff;
+        color: var(--primary);
+        transform: translateY(-6px) scale(1.05);
+    }
+
+    .features-section {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 32px;
+        margin-bottom: 64px;
+    }
+
+    .feature-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        padding: 40px;
+        border-radius: 24px;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+
+    .feature-card:hover {
+        transform: translateY(-12px) scale(1.03);
+        box-shadow: 0 24px 60px rgba(99, 102, 241, 0.2);
+    }
+
+    .feature-icon {
+        font-size: 56px;
+        margin-bottom: 20px;
+        display: inline-block;
+        animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-12px); }
+    }
+
+    .feature-card:nth-child(2) .feature-icon { animation-delay: 0.5s; }
+    .feature-card:nth-child(3) .feature-icon { animation-delay: 1s; }
+    .feature-card:nth-child(4) .feature-icon { animation-delay: 1.5s; }
+
+    .feature-title {
+        font-size: 22px;
+        font-weight: 800;
+        color: var(--dark);
+        margin-bottom: 12px;
+    }
+
+    .feature-description {
+        font-size: 15px;
+        color: #64748b;
+        line-height: 1.6;
+    }
+
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 64px 0 40px;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .view-all-link {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 800;
+        font-size: 16px;
+        transition: all 0.3s;
+        padding: 14px 32px;
+        border-radius: 50px;
+        border: 2px solid var(--primary);
+        box-shadow: 0 4px 16px rgba(99, 102, 241, 0.2);
+    }
+
+    .view-all-link:hover {
+        background: var(--primary);
+        color: #fff;
+        transform: translateX(8px) scale(1.05);
+        box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4);
+    }
+
+    .stats-section {
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.95), rgba(139, 92, 246, 0.95));
+        padding: 64px 40px;
+        border-radius: 32px;
+        color: #fff;
+        text-align: center;
+        margin: 80px 0;
+        box-shadow: 0 24px 60px rgba(99, 102, 241, 0.3);
+    }
+
+    .stats-title {
+        font-family: 'Poppins', sans-serif;
+        font-size: 42px;
+        font-weight: 900;
+        margin-bottom: 20px;
+    }
+
+    .stats-subtitle {
+        font-size: 20px;
+        margin-bottom: 48px;
+        opacity: 0.95;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 40px;
+    }
+
+    .stat-item {
+        animation: fadeUp 0.8s ease backwards;
+    }
+
+    .stat-item:nth-child(1) { animation-delay: 0.1s; }
+    .stat-item:nth-child(2) { animation-delay: 0.2s; }
+    .stat-item:nth-child(3) { animation-delay: 0.3s; }
+    .stat-item:nth-child(4) { animation-delay: 0.4s; }
+
+    .stat-number {
+        font-size: 56px;
+        font-weight: 900;
+        margin-bottom: 8px;
+    }
+
+    .stat-label {
+        font-size: 17px;
+        opacity: 0.9;
+        font-weight: 600;
+    }
+
+    .newsletter-section {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        padding: 56px 40px;
+        border-radius: 32px;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        margin-top: 64px;
+    }
+
+    .newsletter-title {
+        font-family: 'Poppins', sans-serif;
+        font-size: 38px;
+        font-weight: 900;
+        margin-bottom: 16px;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .newsletter-subtitle {
+        color: #64748b;
+        margin-bottom: 32px;
+        font-size: 17px;
+    }
+
+    .newsletter-form {
+        display: flex;
+        gap: 16px;
+        max-width: 600px;
+        margin: 0 auto;
+        flex-wrap: wrap;
+    }
+
+    .newsletter-input {
+        flex: 1;
+        min-width: 250px;
+        padding: 18px 28px;
+        border: 2px solid #e2e8f0;
+        border-radius: 50px;
+        font-size: 16px;
+        outline: none;
+        transition: all 0.3s;
+        font-weight: 600;
+    }
+
+    .newsletter-input:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+    }
+
+    .newsletter-button {
+        padding: 18px 40px;
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        border: none;
+        border-radius: 50px;
+        color: #fff;
+        font-weight: 800;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 16px;
+        box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4);
+    }
+
+    .newsletter-button:hover {
+        transform: scale(1.05) translateY(-2px);
+        box-shadow: 0 12px 32px rgba(99, 102, 241, 0.6);
+    }
+
+    @media (max-width: 768px) {
+        .hero-title { font-size: 42px; }
+        .hero-subtitle { font-size: 18px; }
+        .stats-title { font-size: 32px; }
+        .stat-number { font-size: 42px; }
+        .newsletter-form { flex-direction: column; }
+        .newsletter-input { min-width: 100%; }
+    }
+
+    .product-image img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 16px;
+}
+
+</style>
+
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="hero-content">
+        <h1 class="hero-title">Discover Your Perfect Products</h1>
+        <p class="hero-subtitle">AI-powered recommendations tailored just for you. Shop smarter, discover better, live happier.</p>
+        <div class="hero-cta">
+            {% if user.is_authenticated %}
+                <a href="{% url 'my_recommendations' %}" class="cta-button cta-primary">View My Recommendations</a>
+                <a href="#products" class="cta-button cta-secondary">Browse All Products</a>
             {% else %}
-                ⭐ New Product
+                <a href="/accounts/login/" class="cta-button cta-primary">Get Started Free</a>
+                <a href="#products" class="cta-button cta-secondary">Explore Products</a>
             {% endif %}
         </div>
+    </div>
+</section>
 
-        <div class="price">${{ product.price }}</div>
-        <a href="{% url 'product_detail' product.id %}" class="btn">View Details →</a>
+<!-- Features Section -->
+<section class="features-section">
+    <div class="feature-card">
+        <div class="feature-icon">🤖</div>
+        <h3 class="feature-title">AI-Powered Recommendations</h3>
+        <p class="feature-description">Our advanced algorithm learns your preferences and suggests products you'll absolutely love</p>
     </div>
-    {% empty %}
-    <div style="grid-column: 1/-1; text-align: center; padding: 50px;">
-        <h3>No products available</h3>
-        <p>Please run: <code>python populate_db.py</code></p>
+    
+    <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3 class="feature-title">Lightning Fast Delivery</h3>
+        <p class="feature-description">Get your orders delivered quickly with our express shipping options worldwide</p>
     </div>
-    {% endfor %}
+    
+    <div class="feature-card">
+        <div class="feature-icon">🔒</div>
+        <h3 class="feature-title">Secure Payments</h3>
+        <p class="feature-description">Shop with confidence using our secure payment gateway powered by Razorpay</p>
+    </div>
+    
+    <div class="feature-card">
+        <div class="feature-icon">💎</div>
+        <h3 class="feature-title">Premium Quality</h3>
+        <p class="feature-description">Only the best products make it to our catalog. Quality guaranteed or money back</p>
+    </div>
+</section>
+
+<!-- Trending Products -->
+<div id="products">
+    <div class="section-header">
+        <h2 class="section-title">🔥 Trending Now</h2>
+        <a href="{% url 'home' %}" class="view-all-link">View All Products →</a>
+    </div>
+
+    <div class="product-grid">
+        {% for product in products %}
+        <div class="product-card">
+            <div class="product-image">
+    {% if product.image %}
+        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+    {% else %}
+        <img src="{% static 'images/no-image.png' %}" alt="No Image">
+    {% endif %}
 </div>
 
-{% if categories %}
-<h2 class="section-title">🏷️ Shop by Category</h2>
-
-<div style="display: flex; gap: 15px; flex-wrap: wrap; margin: 20px 0;">
-    {% for category in categories %}
-    
-    <a href="{% url 'category_products' category.id %}" 
-       style="text-decoration: none;">
-
-        <div style="
-            background: white; 
-            padding: 20px 30px; 
-            border-radius: 8px; 
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            transition: 0.3s;
-            cursor: pointer;
-            width: 200px;
-            height: 200px;
-        ">
-            <h3 style="color: #2c3e50; margin-bottom: 5px;">{{ category.name }}</h3>
-            <p style="color: #666; font-size: 0.9em;">{{ category.description }}</p>
+            <div class="product-content">
+                <span class="category">{{ product.category.name }}</span>
+                <h3>{{ product.name }}</h3>
+                <p>{{ product.description|truncatewords:15 }}</p>
+                <div class="rating">
+                    ⭐ {{ product.average_rating|floatformat:1 }} <span style="color: #94a3b8; font-size: 13px;">({{ product.rating_count }} reviews)</span>
+                </div>
+                <div class="price">${{ product.price }}</div>
+                <a href="{% url 'product_detail' product.id %}" class="btn">View Details</a>
+            </div>
         </div>
+        {% empty %}
+        <p style="grid-column: 1/-1; text-align: center; color: #64748b; font-size: 18px; padding: 40px;">No products available yet.</p>
+        {% endfor %}
+    </div>
+</div>
 
-    </a>
+<!-- Personalized Recommendations -->
+{% if user.is_authenticated and recommended_products %}
+<div>
+    <div class="section-header">
+        <h2 class="section-title">🎯 Recommended For You</h2>
+        <a href="{% url 'my_recommendations' %}" class="view-all-link">See All Recommendations →</a>
+    </div>
 
-    {% endfor %}
+    <div class="product-grid">
+        {% for product in recommended_products|slice:":4" %}
+        <div class="product-card">
+            <div class="product-image">
+                {{ product.category.name|slice:":2" }}
+            </div>
+            <div class="product-content">
+                <span class="category">{{ product.category.name }}</span>
+                <h3>{{ product.name }}</h3>
+                <p>{{ product.description|truncatewords:15 }}</p>
+                <div class="rating">⭐ {{ product.average_rating|floatformat:1 }}</div>
+                <div class="price">₹{{ product.price }}</div>
+                <a href="{% url 'product_detail' product.id %}" class="btn">View Details</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
 </div>
 {% endif %}
+
+<!-- Why Choose Us Stats -->
+<div class="stats-section">
+    <h2 class="stats-title">Why Shop With ShopHub?</h2>
+    <p class="stats-subtitle">Join thousands of satisfied customers who trust us for quality products and exceptional service</p>
+    
+    <div class="stats-grid">
+        <div class="stat-item">
+            <div class="stat-number">15k+</div>
+            <div class="stat-label">Happy Customers</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">800+</div>
+            <div class="stat-label">Premium Products</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">4.9★</div>
+            <div class="stat-label">Average Rating</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">24/7</div>
+            <div class="stat-label">Customer Support</div>
+        </div>
+    </div>
+</div>
+
+<!-- Newsletter Section -->
+<div class="newsletter-section">
+    <h2 class="newsletter-title">Stay Updated!</h2>
+    <p class="newsletter-subtitle">Subscribe to get special offers, free giveaways, and once-in-a-lifetime deals.</p>
+    
+    <form method="POST" action="#" class="newsletter-form">
+        {% csrf_token %}
+        <input type="email" name="email" placeholder="Enter your email address" required class="newsletter-input">
+        <button type="submit" class="newsletter-button">Subscribe Now</button>
+    </form>
+</div>
 
 {% endblock %}

@@ -30,6 +30,11 @@ class Product(models.Model):
             return sum([r.score for r in ratings]) / len(ratings)
         return 0
 
+class ProductImage(models.Model):
+    product = models.ForeignKey(Product, related_name='images', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='product_images/')
+
+
 
 class Rating(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -101,3 +106,12 @@ class CartItem(models.Model):
 
     def total_price(self):
         return self.product.price * self.quantity
+
+
+# In models.py
+class Rating(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    score = models.IntegerField(choices=[(i, i) for i in range(1, 6)])
+    review = models.TextField(blank=True, null=True)  # Add this if missing
+    created_at = models.DateTimeField(auto_now_add=True)

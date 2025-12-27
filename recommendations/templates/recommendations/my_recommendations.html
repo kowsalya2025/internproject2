@@ -1,26 +1,443 @@
 {% extends 'recommendations/base.html' %}
-
-{% block title %}My Recommendations - SmartShop{% endblock %}
+{% load static %}
 
 {% block content %}
-<div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 40px 30px; border-radius: 12px; margin: 30px 0;">
-    <h1 style="font-size: 2.2em; margin-bottom: 10px;">🎯 Personalized For You</h1>
-    <p style="font-size: 1.1em; opacity: 0.95;">Based on your browsing history, ratings, and purchases</p>
+<style>
+    .dashboard-header {
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.95), rgba(139, 92, 246, 0.95));
+        padding: 56px 48px;
+        border-radius: 32px;
+        margin-bottom: 48px;
+        color: #fff;
+        box-shadow: 0 24px 60px rgba(99, 102, 241, 0.3);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .dashboard-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 50%;
+        height: 100%;
+        background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+        background-size: 30px 30px;
+    }
+
+    .dashboard-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 24px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .welcome-text h1 {
+        font-family: 'Poppins', sans-serif;
+        font-size: 48px;
+        font-weight: 900;
+        margin-bottom: 12px;
+    }
+
+    .welcome-text p {
+        font-size: 20px;
+        opacity: 0.95;
+    }
+
+    .vip-badge {
+        background: rgba(255, 255, 255, 0.25);
+        backdrop-filter: blur(10px);
+        padding: 28px 40px;
+        border-radius: 24px;
+        text-align: center;
+    }
+
+    .vip-icon {
+        font-size: 42px;
+        font-weight: 900;
+        margin-bottom: 8px;
+    }
+
+    .vip-label {
+        font-size: 16px;
+        opacity: 0.9;
+        font-weight: 700;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 28px;
+        margin-bottom: 56px;
+    }
+
+    .stat-card {
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.95), rgba(139, 92, 246, 0.95));
+        padding: 36px;
+        border-radius: 24px;
+        color: #fff;
+        box-shadow: 0 12px 40px rgba(99, 102, 241, 0.3);
+        transition: all 0.3s;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .stat-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 100px;
+        height: 100px;
+        background: radial-gradient(circle, rgba(255,255,255,0.1), transparent);
+    }
+
+    .stat-card:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 20px 50px rgba(99, 102, 241, 0.4);
+    }
+
+    .stat-card:nth-child(2) {
+        background: linear-gradient(135deg, rgba(236, 72, 153, 0.95), rgba(244, 114, 182, 0.95));
+        box-shadow: 0 12px 40px rgba(236, 72, 153, 0.3);
+    }
+
+    .stat-card:nth-child(2):hover {
+        box-shadow: 0 20px 50px rgba(236, 72, 153, 0.4);
+    }
+
+    .stat-card:nth-child(3) {
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.95), rgba(96, 165, 250, 0.95));
+        box-shadow: 0 12px 40px rgba(59, 130, 246, 0.3);
+    }
+
+    .stat-card:nth-child(3):hover {
+        box-shadow: 0 20px 50px rgba(59, 130, 246, 0.4);
+    }
+
+    .stat-card:nth-child(4) {
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.95), rgba(251, 191, 36, 0.95));
+        box-shadow: 0 12px 40px rgba(245, 158, 11, 0.3);
+    }
+
+    .stat-card:nth-child(4):hover {
+        box-shadow: 0 20px 50px rgba(245, 158, 11, 0.4);
+    }
+
+    .stat-icon {
+        font-size: 52px;
+        margin-bottom: 16px;
+    }
+
+    .stat-number {
+        font-size: 42px;
+        font-weight: 900;
+        margin-bottom: 8px;
+    }
+
+    .stat-label {
+        font-size: 17px;
+        opacity: 0.95;
+        font-weight: 700;
+    }
+
+    .stat-message {
+        margin-top: 16px;
+        font-size: 14px;
+        opacity: 0.85;
+        font-weight: 600;
+    }
+
+    .section-badge {
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        color: #fff;
+        padding: 10px 28px;
+        border-radius: 50px;
+        font-size: 15px;
+        font-weight: 800;
+        letter-spacing: 0.5px;
+    }
+
+    .ai-notice {
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+        padding: 24px;
+        border-radius: 20px;
+        margin-bottom: 32px;
+        text-align: center;
+        border: 2px solid rgba(99, 102, 241, 0.2);
+    }
+
+    .ai-notice-text {
+        font-size: 16px;
+        color: #475569;
+        font-weight: 600;
+    }
+
+    .purchase-history {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        padding: 36px;
+        border-radius: 24px;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+        margin-bottom: 56px;
+    }
+
+    .purchase-item {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        padding: 28px;
+        border-bottom: 2px solid #e2e8f0;
+    }
+
+    .purchase-item:last-child {
+        border-bottom: none;
+    }
+
+    .purchase-image {
+        width: 100px;
+        height: 100px;
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 40px;
+        flex-shrink: 0;
+        box-shadow: 0 8px 24px rgba(99, 102, 241, 0.3);
+    }
+
+    .purchase-details {
+        flex: 1;
+    }
+
+    .purchase-name {
+        font-size: 20px;
+        font-weight: 800;
+        margin-bottom: 8px;
+        color: var(--dark);
+    }
+
+    .purchase-meta {
+        color: #64748b;
+        font-size: 15px;
+        margin-bottom: 6px;
+        font-weight: 600;
+    }
+
+    .purchase-date {
+        color: #94a3b8;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .purchase-price {
+        text-align: right;
+    }
+
+    .purchase-amount {
+        font-size: 28px;
+        font-weight: 900;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 12px;
+    }
+
+    .purchase-action {
+        display: inline-block;
+        padding: 10px 24px;
+        background: #f8fafc;
+        color: var(--dark);
+        text-decoration: none;
+        border-radius: 50px;
+        font-size: 14px;
+        font-weight: 800;
+        transition: all 0.3s;
+        border: 2px solid #e2e8f0;
+    }
+
+    .purchase-action:hover {
+        background: var(--primary);
+        color: #fff;
+        border-color: var(--primary);
+        transform: scale(1.05);
+    }
+
+    .cta-section {
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.95), rgba(139, 92, 246, 0.95));
+        padding: 56px 40px;
+        border-radius: 32px;
+        text-align: center;
+        color: #fff;
+        margin-top: 56px;
+        box-shadow: 0 24px 60px rgba(99, 102, 241, 0.3);
+    }
+
+    .cta-title {
+        font-family: 'Poppins', sans-serif;
+        font-size: 42px;
+        font-weight: 900;
+        margin-bottom: 16px;
+    }
+
+    .cta-subtitle {
+        font-size: 19px;
+        margin-bottom: 36px;
+        opacity: 0.95;
+    }
+
+    .cta-buttons {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .cta-button {
+        padding: 18px 48px;
+        background: #fff;
+        color: var(--primary);
+        text-decoration: none;
+        border-radius: 50px;
+        font-weight: 800;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s;
+        font-size: 16px;
+    }
+
+    .cta-button:hover {
+        transform: translateY(-4px) scale(1.05);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    .cta-button-secondary {
+        background: transparent;
+        color: #fff;
+        border: 3px solid #fff;
+    }
+
+    .cta-button-secondary:hover {
+        background: #fff;
+        color: var(--primary);
+    }
+
+    .empty-state {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        padding: 80px 48px;
+        border-radius: 32px;
+        text-align: center;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    .empty-icon {
+        font-size: 80px;
+        margin-bottom: 24px;
+    }
+
+    .empty-title {
+        font-size: 28px;
+        font-weight: 900;
+        margin-bottom: 12px;
+        color: var(--dark);
+    }
+
+    @media (max-width: 768px) {
+        .dashboard-header { padding: 40px 28px; }
+        .welcome-text h1 { font-size: 36px; }
+        .stats-grid { grid-template-columns: 1fr; }
+        .purchase-item { flex-direction: column; text-align: center; }
+        .purchase-price { text-align: center; margin-top: 16px; }
+    }
+</style>
+
+<!-- Dashboard Header -->
+<div class="dashboard-header">
+    <div class="dashboard-content">
+        <div class="welcome-text">
+            <h1>Welcome back, {{ user.username }}! 👋</h1>
+            <p>Here are your personalized recommendations</p>
+        </div>
+        <div class="vip-badge">
+            <div class="vip-icon">⭐ VIP</div>
+            <div class="vip-label">Premium Member</div>
+        </div>
+    </div>
 </div>
 
-{% if recent_purchases %}
-<div style="background: white; padding: 30px; border-radius: 12px; margin: 30px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-    <h2 style="color: #2c3e50; margin-bottom: 20px;">📦 Your Recent Purchases</h2>
-    <div style="display: grid; gap: 15px;">
-        {% for purchase in recent_purchases %}
-        <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: #f8f9fa; border-radius: 8px;">
-            <div>
-                <strong style="color: #2c3e50;">{{ purchase.product.name }}</strong>
-                <span style="color: #666; margin-left: 15px;">Qty: {{ purchase.quantity }}</span>
-            </div>
-            <div>
-                <span style="color: #27ae60; font-weight: bold;">${{ purchase.product.price }}</span>
-                <span style="color: #999; margin-left: 15px; font-size: 0.9em;">{{ purchase.purchased_at|date:"M d, Y" }}</span>
+<!-- User Statistics -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon">🛍️</div>
+        <div class="stat-number">{{ total_purchases }}</div>
+        <div class="stat-label">Total Purchases</div>
+        <div class="stat-message">
+            {% if total_purchases > 10 %}🎉 You're a top shopper!
+            {% elif total_purchases > 5 %}💪 Keep it up!
+            {% else %}🌟 Start your journey!{% endif %}
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon">⭐</div>
+        <div class="stat-number">{{ total_ratings }}</div>
+        <div class="stat-label">Products Rated</div>
+        <div class="stat-message">
+            {% if total_ratings > 20 %}🏆 Review Champion!
+            {% elif total_ratings > 10 %}📝 Great contributor!
+            {% else %}✍️ Share your thoughts!{% endif %}
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon">👀</div>
+        <div class="stat-number">{{ total_views }}</div>
+        <div class="stat-label">Products Viewed</div>
+        <div class="stat-message">
+            {% if total_views > 50 %}🔥 Active explorer!
+            {% elif total_views > 20 %}🚀 Good browsing!
+            {% else %}🌈 Discover more!{% endif %}
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon">🎯</div>
+        <div class="stat-number">{{ personalized_recommendations.count }}</div>
+        <div class="stat-label">AI Recommendations</div>
+        <div class="stat-message">🤖 Powered by AI</div>
+    </div>
+</div>
+
+<!-- Recently Viewed -->
+{% if recently_viewed %}
+<div>
+    <div class="section-header">
+        <h2 class="section-title">👀 Recently Viewed</h2>
+        <a href="{% url 'home' %}" class="view-all-link">Browse More →</a>
+    </div>
+
+    <div class="product-grid">
+        {% for product in recently_viewed %}
+        <div class="product-card">
+            <div class="product-image" style="height:150px; display:flex; align-items:center; justify-content:center; background:#f1f5f9; border-radius:12px;">
+    {% if product.image %}
+        <img src="{{ product.image.url }}" alt="{{ product.name }}" style="max-width:100%; max-height:100%; object-fit:cover; border-radius:12px;">
+    {% else %}
+        <span style="font-size:2.5em;">🛍️</span>
+    {% endif %}
+</div>
+
+            <div class="product-content">
+                <span class="category">{{ product.category.name }}</span>
+                <h3>{{ product.name }}</h3>
+                <p>{{ product.description|truncatewords:12 }}</p>
+                <div class="rating">⭐ {{ product.average_rating|floatformat:1 }}</div>
+                <div class="price">₹{{ product.price }}</div>
+                <a href="{% url 'product_detail' product.id %}" class="btn">View Again</a>
             </div>
         </div>
         {% endfor %}
@@ -28,63 +445,127 @@
 </div>
 {% endif %}
 
-{% if personalized_recommendations %}
-<h2 class="section-title">✨ Recommended Just For You</h2>
-<p style="color: #666; margin-bottom: 20px;">Based on your preferences and similar users' choices</p>
-<div class="product-grid">
-    {% for product in personalized_recommendations %}
-    <div class="product-card">
-
-        <!-- ⭐ ADD IMAGE HERE ⭐ -->
-        {% if product.image %}
-        <img src="{{ product.image.url }}" alt="{{ product.name }}" 
-             style="width: 100%; height: 180px; object-fit: cover; border-radius: 8px;">
-        {% endif %}
-
-        <h3>{{ product.name }}</h3>
-        <span class="category">{{ product.category.name }}</span>
-        <p>{{ product.description|truncatewords:12 }}</p>
-        <div class="rating">⭐ {{ product.average_rating|floatformat:1 }}</div>
-        <div class="price">${{ product.price }}</div>
-        <a href="{% url 'product_detail' product.id %}" class="btn">View Details →</a>
+<!-- Personalized Recommendations -->
+<div style="margin-top: 56px;">
+    <div class="section-header">
+        <h2 class="section-title">🎯 Recommended For You</h2>
+        <span class="section-badge">AI Powered</span>
     </div>
-    {% endfor %}
+
+    <div class="ai-notice">
+        <p class="ai-notice-text">💡 These recommendations are based on your browsing history, purchases, and ratings</p>
+    </div>
+
+    {% if personalized_recommendations %}
+    <div class="product-grid">
+        {% for product in personalized_recommendations %}
+        <div class="product-card">
+            <div class="product-image" style="height:150px; display:flex; align-items:center; justify-content:center; background:#f1f5f9; border-radius:12px; margin-bottom:15px;">
+    {% if product.image %}
+        <img src="{{ product.image.url }}" alt="{{ product.name }}" style="max-width:100%; max-height:100%; object-fit:cover; border-radius:12px;">
+    {% else %}
+        <span style="font-size:2.5em;">🛍️</span>
+    {% endif %}
 </div>
-{% else %}
-<div class="alert alert-info">
-    <h3>🎁 Start Your Journey!</h3>
-    <p>We need a bit more information to personalize recommendations for you.</p>
-    <p style="margin-top: 10px;">
-        <strong>Quick tips:</strong><br>
-        • Browse and rate products<br>
-        • Make a few purchases<br>
-        • Our AI will learn your preferences!
-    </p>
-    <a href="/" class="btn" style="margin-top: 15px;">Explore Products</a>
+
+            <div class="product-content">
+                <span class="category">{{ product.category.name }}</span>
+                <h3>{{ product.name }}</h3>
+                <p>{{ product.description|truncatewords:12 }}</p>
+                <div class="rating">⭐ {{ product.average_rating|floatformat:1 }}</div>
+                <div class="price">₹{{ product.price }}</div>
+                <a href="{% url 'product_detail' product.id %}" class="btn">View Details</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-icon">🎯</div>
+        <h3 class="empty-title">Start Building Your Profile</h3>
+        <p style="color: #64748b; margin-bottom: 32px; font-size: 17px;">Browse products and make purchases to get personalized recommendations</p>
+        <a href="{% url 'home' %}" class="empty-action cta-button">Start Shopping</a>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Recent Purchase History -->
+{% if recent_purchases %}
+<div style="margin-top: 56px;">
+    <div class="section-header">
+        <h2 class="section-title">📦 Recent Purchases</h2>
+    </div>
+
+    <div class="purchase-history">
+        {% for purchase in recent_purchases %}
+        <div class="purchase-item" style="display:flex; align-items:center; gap:24px; padding:28px; border-bottom:2px solid #e2e8f0;">
+            
+            <!-- Product Image -->
+            <div class="purchase-image" style="width:150px; height:150px; display:flex; align-items:center; justify-content:center; background:#f1f5f9; border-radius:12px; flex-shrink:0;">
+                {% if purchase.product.image %}
+                    <img src="{{ purchase.product.image.url }}" alt="{{ purchase.product.name }}" style="max-width:100%; max-height:100%; object-fit:cover; border-radius:12px;">
+                {% else %}
+                    <span style="font-size:2.5em;">🛍️</span>
+                {% endif %}
+            </div>
+
+            <!-- Product Details -->
+            <div class="purchase-details" style="flex:1;">
+                <h4 class="purchase-name">{{ purchase.product.name }}</h4>
+                <p class="purchase-meta">Quantity: {{ purchase.quantity }} | Category: {{ purchase.product.category.name }}</p>
+                <p class="purchase-date">Purchased on {{ purchase.purchased_at|date:"M d, Y" }}</p>
+            </div>
+
+            <!-- Price & Action -->
+            <div class="purchase-price" style="text-align:right;">
+                <div class="purchase-amount">₹{{ purchase.product.price }}</div>
+                <a href="{% url 'product_detail' purchase.product.id %}" class="purchase-action" style="display:inline-block; padding:10px 24px; background:#f8fafc; color:#1f2937; text-decoration:none; border-radius:50px; font-weight:600; border:2px solid #e2e8f0; transition:all 0.3s;">View Product</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
 </div>
 {% endif %}
 
-{% if popular_products %}
-<h2 class="section-title">🔥 Trending Products</h2>
-<p style="color: #666; margin-bottom: 20px;">Most popular items right now</p>
-<div class="product-grid">
-    {% for product in popular_products %}
-    <div class="product-card">
 
-        <!-- ⭐ ADD IMAGE HERE TOO ⭐ -->
-        {% if product.image %}
-        <img src="{{ product.image.url }}" alt="{{ product.name }}" 
-             style="width: 100%; height: 180px; object-fit: cover; border-radius: 8px;">
-        {% endif %}
-
-        <h3>{{ product.name }}</h3>
-        <span class="category">{{ product.category.name }}</span>
-        <p>{{ product.description|truncatewords:12 }}</p>
-        <div class="rating">⭐ {{ product.average_rating|floatformat:1 }}</div>
-        <div class="price">${{ product.price }}</div>
-        <a href="{% url 'product_detail' product.id %}" class="btn">View Details →</a>
+<!-- Popular Products -->
+<div style="margin-top: 56px;">
+    <div class="section-header">
+        <h2 class="section-title">🔥 Trending Now</h2>
     </div>
-    {% endfor %}
+
+    <div class="product-grid">
+        {% for product in popular_products %}
+        <div class="product-card">
+            <div class="product-image" style="height:150px; display:flex; align-items:center; justify-content:center; background:#f1f5f9; border-radius:12px; margin-bottom:15px;">
+    {% if product.image %}
+        <img src="{{ product.image.url }}" alt="{{ product.name }}" style="max-width:100%; max-height:100%; object-fit:cover; border-radius:12px;">
+    {% else %}
+        <span style="font-size:2.5em;">🛍️</span>
+    {% endif %}
 </div>
-{% endif %}
+
+            <div class="product-content">
+                <span class="category">{{ product.category.name }}</span>
+                <h3>{{ product.name }}</h3>
+                <p>{{ product.description|truncatewords:12 }}</p>
+                <div class="rating">⭐ {{ product.average_rating|floatformat:1 }}</div>
+                <div class="price">₹{{ product.price }}</div>
+                <a href="{% url 'product_detail' product.id %}" class="btn">View Details</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Call to Action -->
+<div class="cta-section">
+    <h2 class="cta-title">Keep Exploring!</h2>
+    <p class="cta-subtitle">The more you shop and rate products, the better our recommendations become</p>
+    <div class="cta-buttons">
+        <a href="{% url 'home' %}" class="cta-button">Browse All Products</a>
+        <a href="{% url 'cart' %}" class="cta-button cta-button-secondary">View Cart ({{ cart_count }})</a>
+    </div>
+</div>
+
 {% endblock %}

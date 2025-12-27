@@ -1,39 +1,624 @@
-{% extends "recommendations/base.html" %}
+{% extends 'recommendations/base.html' %}
+{% load static %}
+
 
 {% block content %}
-<h1>Your Cart</h1>
+<style>
+    .cart-header {
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.95), rgba(139, 92, 246, 0.95));
+        padding: 48px 40px;
+        border-radius: 32px;
+        margin-bottom: 48px;
+        color: #fff;
+        box-shadow: 0 24px 60px rgba(99, 102, 241, 0.3);
+    }
+
+    .cart-title {
+        font-family: 'Poppins', sans-serif;
+        font-size: 48px;
+        font-weight: 900;
+        margin-bottom: 12px;
+    }
+
+    .cart-subtitle {
+        font-size: 20px;
+        opacity: 0.95;
+    }
+
+    .cart-layout {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 32px;
+    }
+
+    .cart-items {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border-radius: 24px;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    .cart-item {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        padding: 32px;
+        border-bottom: 2px solid #e2e8f0;
+    }
+
+    .cart-item:last-child {
+        border-bottom: none;
+    }
+
+    .item-image {
+        width: 140px;
+        height: 140px;
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 56px;
+        flex-shrink: 0;
+        box-shadow: 0 8px 24px rgba(99, 102, 241, 0.3);
+    }
+
+    .item-details {
+        flex: 1;
+    }
+
+    .item-category {
+        display: inline-block;
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        color: #fff;
+        padding: 5px 16px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 800;
+        margin-bottom: 12px;
+        text-transform: uppercase;
+    }
+
+    .item-name {
+        font-size: 22px;
+        font-weight: 800;
+        margin-bottom: 10px;
+        color: var(--dark);
+    }
+
+    .item-name a {
+        color: inherit;
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+
+    .item-name a:hover {
+        color: var(--primary);
+    }
+
+    .item-description {
+        color: #64748b;
+        font-size: 15px;
+        margin-bottom: 12px;
+        line-height: 1.5;
+    }
+
+    .item-rating {
+        color: #f59e0b;
+        font-weight: 800;
+        font-size: 15px;
+        margin-bottom: 8px;
+    }
+
+    .item-controls {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .item-price {
+        font-size: 28px;
+        font-weight: 900;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .quantity-control {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: #f8fafc;
+        border-radius: 50px;
+        padding: 6px;
+    }
+
+    .qty-btn {
+        width: 40px;
+        height: 40px;
+        background: #fff;
+        border: 2px solid #e2e8f0;
+        border-radius: 50%;
+        font-size: 20px;
+        font-weight: 800;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .qty-btn:hover {
+        background: var(--primary);
+        color: #fff;
+        border-color: var(--primary);
+        transform: scale(1.1);
+    }
+
+    .qty-value {
+        font-size: 20px;
+        font-weight: 900;
+        min-width: 40px;
+        text-align: center;
+        color: var(--dark);
+    }
+
+    .item-subtotal {
+        font-size: 15px;
+        color: #64748b;
+        font-weight: 700;
+    }
+
+    .item-remove {
+        color: var(--danger);
+        background: none;
+        border: none;
+        font-size: 15px;
+        font-weight: 800;
+        cursor: pointer;
+        text-decoration: underline;
+        transition: all 0.3s;
+    }
+
+    .item-remove:hover {
+        color: #dc2626;
+        transform: scale(1.05);
+    }
+
+    .order-summary {
+        position: sticky;
+        top: 120px;
+        height: fit-content;
+    }
+
+    .summary-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        padding: 36px;
+        border-radius: 24px;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    .summary-title {
+        font-family: 'Poppins', sans-serif;
+        font-size: 28px;
+        font-weight: 900;
+        margin-bottom: 32px;
+        color: var(--dark);
+    }
+
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 16px;
+        font-size: 16px;
+    }
+
+    .summary-label {
+        color: #64748b;
+        font-weight: 600;
+    }
+
+    .summary-value {
+        font-weight: 800;
+        color: var(--dark);
+    }
+
+    .summary-divider {
+        height: 2px;
+        background: #e2e8f0;
+        margin: 24px 0;
+    }
+
+    .summary-total {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 32px;
+        font-size: 22px;
+    }
+
+    .total-label {
+        font-weight: 900;
+        color: var(--dark);
+    }
+
+    .total-value {
+        font-weight: 900;
+        font-size: 32px;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .checkout-btn {
+        display: block;
+        width: 100%;
+        padding: 18px;
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        color: #fff;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 16px;
+        font-weight: 900;
+        font-size: 17px;
+        margin-bottom: 16px;
+        box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4);
+        transition: all 0.3s;
+        border: none;
+        cursor: pointer;
+    }
+
+    .checkout-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 32px rgba(99, 102, 241, 0.6);
+    }
+
+    .continue-shopping {
+        display: block;
+        width: 100%;
+        padding: 16px;
+        background: #f8fafc;
+        color: var(--primary);
+        text-align: center;
+        text-decoration: none;
+        border-radius: 16px;
+        font-weight: 800;
+        font-size: 16px;
+        transition: all 0.3s;
+        border: 2px solid #e2e8f0;
+    }
+
+    .continue-shopping:hover {
+        background: #e2e8f0;
+        transform: translateY(-2px);
+    }
+
+    .promo-features {
+        margin-top: 32px;
+        padding-top: 32px;
+        border-top: 2px solid #e2e8f0;
+    }
+
+    .promo-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+        color: var(--success);
+        font-weight: 700;
+        font-size: 15px;
+    }
+
+    .promo-icon {
+        font-size: 24px;
+    }
+
+    .empty-cart {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        padding: 80px 48px;
+        border-radius: 32px;
+        text-align: center;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    .empty-icon {
+        font-size: 100px;
+        margin-bottom: 32px;
+        animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-20px); }
+    }
+
+    .empty-title {
+        font-family: 'Poppins', sans-serif;
+        font-size: 42px;
+        font-weight: 900;
+        margin-bottom: 16px;
+        color: var(--dark);
+    }
+
+    .empty-description {
+        font-size: 19px;
+        color: #64748b;
+        margin-bottom: 36px;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .empty-actions {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .trust-badges {
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(221, 218, 226, 0.945));
+        padding: 48px 32px;
+        border-radius: 24px;
+        margin-top: 56px;
+    }
+
+    .badges-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 32px;
+        text-align: center;
+    }
+
+    .badge-item {
+        animation: fadeUp 0.8s ease backwards;
+    }
+
+    .badge-icon {
+        font-size: 56px;
+        margin-bottom: 16px;
+    }
+
+    .badge-title {
+        font-size: 19px;
+        font-weight: 800;
+        margin-bottom: 8px;
+        color: var(--dark);
+    }
+
+    .badge-description {
+        font-size: 15px;
+        color: #64748b;
+        font-weight: 600;
+    }
+
+    @media (max-width: 992px) {
+        .cart-layout {
+            grid-template-columns: 1fr;
+        }
+        .order-summary {
+            position: static;
+        }
+        .cart-item {
+            flex-wrap: wrap;
+        }
+    }
+
+    .section-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: #fff;
+    font-weight: 700;
+    font-size: 14px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.5);
+    animation: floatBadge 2.5s ease-in-out infinite, glowBadge 1.5s ease-in-out infinite alternate;
+    text-transform: uppercase;
+    margin-left: 20px;
+}
+
+/* Floating effect */
+@keyframes floatBadge {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+/* Glowing effect */
+@keyframes glowBadge {
+    0% { box-shadow: 0 4px 15px rgba(139, 92, 246, 0.5); }
+    100% { box-shadow: 0 8px 25px rgba(139, 92, 246, 0.8); }
+}
+
+</style>
+
+<!-- Cart Header -->
+<div class="cart-header">
+    <h1 class="cart-title">🛒 Shopping Cart</h1>
+    <p class="cart-subtitle">
+        {% if items %}You have {{ items.count }} item{{ items.count|pluralize }} in your cart
+        {% else %}Your cart is empty{% endif %}
+    </p>
+</div>
 
 {% if items %}
-<table>
-    <tr>
-        <th>Product</th>
-        <th>Quantity</th>
-        <th>Price</th>
-        <th>Total</th>
-        <th>Actions</th>
-    </tr>
-    {% for item in items %}
-    <tr>
-        <td>{{ item.product.name }}</td>
-        <td>{{ item.quantity }}</td>
-        <td>₹{{ item.product.price }}</td>
-        <td>₹{{ item.total_price }}</td>
-        <td>
-            <form method="POST" action="{% url 'update_cart_item' item.id %}">
-                {% csrf_token %}
-                <button name="action" value="increment">+</button>
-                <button name="action" value="decrement">-</button>
-                <button name="action" value="remove">Remove</button>
-            </form>
-        </td>
-    </tr>
-    {% endfor %}
-</table>
-<p>Total Amount: ₹{{ total }}</p>
-<a href="{% url 'checkout_cart' %}">Checkout</a>
-{% else %}
-<p>Your cart is empty.</p>
-{% endif %}
-{% endblock %}
+<div class="cart-layout">
+    <!-- Cart Items -->
+    <div class="cart-items">
+        {% for item in items %}
+        <div class="cart-item">
+            <div class="item-image">
+    {% if item.product.image %}
+        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}"
+             style="width:100%; height:100%; object-fit:cover; border-radius:20px;">
+    {% else %}
+        <img src="{% static 'images/default.png' %}" alt="No Image"
+             style="width:100%; height:100%; object-fit:cover; border-radius:20px;">
+    {% endif %}
+</div>
 
+
+            <div class="item-details">
+                <span class="item-category">{{ item.product.category.name }}</span>
+                <h3 class="item-name">
+                    <a href="{% url 'product_detail' item.product.id %}">{{ item.product.name }}</a>
+                </h3>
+                <p class="item-description">{{ item.product.description|truncatewords:15 }}</p>
+                <div class="item-rating">⭐ {{ item.product.average_rating|floatformat:1 }} • In Stock</div>
+            </div>
+
+            <div class="item-controls">
+                <div class="item-price">₹{{ item.product.price }}</div>
+                
+                <div class="quantity-control">
+                    <form method="POST" action="{% url 'update_cart_item' item.id %}" style="display: inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="decrement">
+                        <button type="submit" class="qty-btn">-</button>
+                    </form>
+                    
+                    <span class="qty-value">{{ item.quantity }}</span>
+                    
+                    <form method="POST" action="{% url 'update_cart_item' item.id %}" style="display: inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="increment">
+                        <button type="submit" class="qty-btn">+</button>
+                    </form>
+                </div>
+
+                
+
+                <form method="POST" action="{% url 'update_cart_item' item.id %}" style="display: inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="remove">
+                    <button type="submit" class="item-remove">🗑️ Remove</button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Order Summary -->
+    <div class="order-summary">
+        <div class="summary-card">
+            <h3 class="summary-title">📋 Order Summary</h3>
+
+            <div class="summary-row">
+                <span class="summary-label">Subtotal ({{ items.count }} items)</span>
+                <span class="summary-value">₹{{ total }}</span>
+            </div>
+            <div class="summary-row">
+                <span class="summary-label">Shipping</span>
+                <span class="summary-value" style="color: var(--success);">FREE</span>
+            </div>
+            <div class="summary-row">
+                <span class="summary-label">Tax (estimated)</span>
+                <span class="summary-value">₹{{ total|floatformat:2|add:"0"|floatformat:2 }}</span>
+            </div>
+
+            <div class="summary-divider"></div>
+
+            <div class="summary-total">
+                <span class="total-label">Total</span>
+                <span class="total-value">₹{{ total }}</span>
+            </div>
+
+            <a href="{% url 'checkout_cart' %}" class="checkout-btn">🔒 Proceed to Checkout</a>
+            <a href="{% url 'home' %}" class="continue-shopping">← Continue Shopping</a>
+
+            <div class="promo-features">
+                <div class="promo-item">
+                    <span class="promo-icon">✓</span>
+                    <span>Free Shipping on all orders</span>
+                </div>
+                <div class="promo-item">
+                    <span class="promo-icon">✓</span>
+                    <span>30-day easy returns</span>
+                </div>
+                <div class="promo-item">
+                    <span class="promo-icon">✓</span>
+                    <span>Secure payment guaranteed</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- You Might Also Like -->
+{% if cart_recommendations %}
+<div style="margin-top: 64px;">
+    <div class="section-header">
+        <h2 class="section-title">💡 You Might Also Like</h2>
+        <span class="section-badge">Based on your cart</span>
+    </div>
+
+    <div class="product-grid">
+       {% for product in cart_recommendations %}
+<div class="product-card">
+    <div class="product-image" style="height:250px; display:flex; align-items:center; justify-content:center; background:#f1f5f9; border-radius:12px; overflow:hidden; margin-bottom:15px;">
+        {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width:100%; height:100%; object-fit:cover;">
+        {% else %}
+            <span style="font-size:3em;">🛍️</span>
+        {% endif %}
+    </div>
+
+    <div class="product-content">
+        <span class="category">{{ product.category.name }}</span>
+        <h3>{{ product.name }}</h3>
+        <p>{{ product.description|truncatewords:12 }}</p>
+        <div class="rating">⭐ {{ product.average_rating|floatformat:1 }}</div>
+        <div class="price">₹{{ product.price }}</div>
+        <a href="{% url 'product_detail' product.id %}" class="btn">View Details</a>
+    </div>
+</div>
+{% endfor %}
+
+    </div>
+</div>
+{% endif %}
+
+{% else %}
+<!-- Empty Cart -->
+<div class="empty-cart">
+    <div class="empty-icon">🛒</div>
+    <h2 class="empty-title">Your Cart is Empty</h2>
+    <p class="empty-description">Looks like you haven't added anything to your cart yet. Start shopping and discover amazing products!</p>
+    <div class="empty-actions">
+        <a href="{% url 'home' %}" class="cta-button cta-primary">Start Shopping</a>
+        <a href="{% url 'my_recommendations' %}" class="cta-button cta-secondary">View Recommendations</a>
+    </div>
+</div>
+{% endif %}
+
+<!-- Trust Badges -->
+<div class="trust-badges">
+    <div class="badges-grid">
+        <div class="badge-item">
+            <div class="badge-icon">🚚</div>
+            <h4 class="badge-title">Fast Delivery</h4>
+            <p class="badge-description">2-3 business days</p>
+        </div>
+        <div class="badge-item">
+            <div class="badge-icon">🔒</div>
+            <h4 class="badge-title">Secure Payment</h4>
+            <p class="badge-description">100% protected</p>
+        </div>
+        <div class="badge-item">
+            <div class="badge-icon">↩️</div>
+            <h4 class="badge-title">Easy Returns</h4>
+            <p class="badge-description">30-day guarantee</p>
+        </div>
+        <div class="badge-item">
+            <div class="badge-icon">💬</div>
+            <h4 class="badge-title">24/7 Support</h4>
+            <p class="badge-description">Always here to help</p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
 
