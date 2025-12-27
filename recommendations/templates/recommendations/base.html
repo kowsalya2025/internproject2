@@ -686,6 +686,7 @@
     justify-content: center;
     width: 100%;
     height: 100%;
+    font-size: 1.5em; 
 }
 
 .social-link:hover {
@@ -714,6 +715,124 @@
 
     .social-links {
         justify-content: center;
+    }
+}
+
+
+
+/* Responsive navbar */
+@media (max-width: 1024px) {
+    .nav-main {
+        flex-wrap: wrap;
+        gap: 16px;
+        padding: 16px 24px;
+        justify-content: center;
+    }
+
+    .search-container {
+        order: 3;
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
+
+    .nav-actions {
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .nav-item span {
+        display: none; /* hide text, show only icons */
+    }
+
+    .logo span {
+        font-size: 18px;
+    }
+
+    .categories-content {
+        gap: 16px;
+        padding: 8px 0;
+    }
+}
+
+/* For small mobiles */
+@media (max-width: 600px) {
+    .nav-main {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .search-box {
+        flex-direction: column;
+    }
+
+    .search-box input, .search-box button {
+        width: 100%;
+        border-radius: 12px;
+    }
+
+    .nav-actions {
+        gap: 8px;
+    }
+
+    .nav-item {
+        padding: 8px 12px;
+    }
+}
+.categories-content {
+    overflow-x: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(99,102,241,0.4) transparent;
+}
+
+.categories-content::-webkit-scrollbar {
+    height: 6px;
+}
+
+.categories-content::-webkit-scrollbar-thumb {
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    border-radius: 3px;
+}
+@media (max-width: 768px) {
+    .footer-content {
+        grid-template-columns: 1fr 1fr;
+        text-align: center;
+        gap: 32px;
+    }
+
+    .footer-section h3 {
+        font-size: 18px;
+    }
+
+    .social-links {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer-content {
+        grid-template-columns: 1fr;
+        padding: 40px 16px;
+    }
+
+    .social-link {
+        width: 50px;
+        height: 50px;
+        font-size: 26px;
+    }
+}
+.search-box {
+    flex-direction: row;
+}
+
+@media (max-width: 600px) {
+    .search-box {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .search-box input, .search-box button {
+        width: 100%;
     }
 }
 
