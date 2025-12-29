@@ -115,3 +115,19 @@ class Rating(models.Model):
     score = models.IntegerField(choices=[(i, i) for i in range(1, 6)])
     review = models.TextField(blank=True, null=True)  # Add this if missing
     created_at = models.DateTimeField(auto_now_add=True)
+
+    # models.py
+from django.db import models
+from django.contrib.auth.models import User
+from .models import Product
+
+class Wishlist(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'product')  # prevents duplicates
+
+    def __str__(self):
+        return f"{self.user.username} - {self.product.name}"

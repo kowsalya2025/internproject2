@@ -38,6 +38,11 @@ urlpatterns = [
     
     # Logout
     path('logout/', views.logout_view, name='logout'),
+
+    # urls.py
+    path('wishlist/', views.wishlist_view, name='wishlist'),
+path('wishlist/<int:product_id>/', views.toggle_wishlist, name='toggle_wishlist'),
+
 ]
 
 if settings.DEBUG:

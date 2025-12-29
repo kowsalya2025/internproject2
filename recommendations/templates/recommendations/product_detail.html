@@ -431,6 +431,61 @@
             grid-template-columns: 1fr;
         }
     }
+
+/* Heart button container */
+.btn-wishlist {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px solid #e5e7eb;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    color: #e5e7eb; /* gray heart by default */
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* Hover effect */
+.btn-wishlist:hover {
+    transform: scale(1.2);
+    color: #ff4d6d; /* pink heart on hover */
+    background-color: #ffe4e6;
+    border-color: #ff4d6d;
+}
+
+/* Active state when added to wishlist */
+.btn-wishlist.active {
+    background-color: #ff4d6d;
+    color: #fff;
+    border-color: #ff4d6d;
+    box-shadow: 0 4px 12px rgba(255, 77, 109, 0.4);
+    transform: scale(1.2);
+}
+
+.product-image {
+    width: 100%;
+    height: 220px;              /* fixed height */
+    overflow: hidden;
+    border-radius: 16px;
+    background: #f3f4f6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;          /* 🔥 fixes stretching */
+    border-radius: 16px;
+}
+
+
+
 </style>
 
 <div class="product-layout">
@@ -501,17 +556,19 @@
             🛒 Add to Cart
         </a>
 
-        <a href="{% url 'cart' %}" class="btn-buy-now">
-            ⚡ Buy Now
-        </a>
+        <a href="{% url 'toggle_wishlist' product.id %}"
+   class="btn-wishlist {% if product.id in wishlist_ids %}active{% endif %}">
+   ❤️
+</a>
 
-        <button class="btn-wishlist">❤️</button>
+
     {% else %}
         <a href="{% url 'login' %}" class="btn-add-cart">
             Login to Purchase
         </a>
     {% endif %}
 </div>
+
 
 
        
@@ -601,7 +658,10 @@
     <div class="product-grid">
         {% for product in similar_products %}
         <div class="product-card">
-            <div class="product-image">{{ product.category.name|slice:":2" }}</div>
+            <div class="product-image">
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+            </div>
+
             <div class="product-content">
                 <span class="category">{{ product.category.name }}</span>
                 <h3>{{ product.name }}</h3>
@@ -616,7 +676,7 @@
 </div>
 {% endif %}
 
-<!-- Recommended For You -->
+<!-- Recommended Products -->
 {% if recommendations %}
 <div style="margin-top: 64px;">
     <div class="section-header">
@@ -627,13 +687,16 @@
     <div class="product-grid">
         {% for product in recommendations %}
         <div class="product-card">
-            <div class="product-image">{{ product.category.name|slice:":2" }}</div>
+            <div class="product-image">
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+            </div>
+
             <div class="product-content">
                 <span class="category">{{ product.category.name }}</span>
                 <h3>{{ product.name }}</h3>
                 <p>{{ product.description|truncatewords:12 }}</p>
                 <div class="rating">⭐ {{ product.average_rating|floatformat:1 }}</div>
-                <div class="price">${{ product.price }}</div>
+                <div class="price">₹{{ product.price }}</div>
                 <a href="{% url 'product_detail' product.id %}" class="btn">View Details</a>
             </div>
         </div>
@@ -641,6 +704,7 @@
     </div>
 </div>
 {% endif %}
+
 
 <script>
 // Star rating interactive effect
