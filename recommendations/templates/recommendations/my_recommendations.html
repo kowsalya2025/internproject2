@@ -3,26 +3,32 @@
 
 {% block content %}
 <style>
-    .dashboard-header {
-        background: linear-gradient(135deg, rgba(99, 102, 241, 0.95), rgba(139, 92, 246, 0.95));
-        padding: 56px 48px;
-        border-radius: 32px;
-        margin-bottom: 48px;
-        color: #fff;
-        box-shadow: 0 24px 60px rgba(99, 102, 241, 0.3);
-        position: relative;
-        overflow: hidden;
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
     }
 
-    .dashboard-header::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        right: 0;
-        width: 50%;
-        height: 100%;
-        background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
-        background-size: 30px 30px;
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        background: #f5f7fa;
+        color: #2d3748;
+    }
+
+    .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 30px 20px;
+    }
+
+    /* Professional Header */
+    .dashboard-header {
+        background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+        padding: 40px;
+        border-radius: 16px;
+        margin-bottom: 40px;
+        color: #fff;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
     }
 
     .dashboard-content {
@@ -30,167 +36,259 @@
         justify-content: space-between;
         align-items: center;
         flex-wrap: wrap;
-        gap: 24px;
-        position: relative;
-        z-index: 1;
+        gap: 20px;
     }
 
     .welcome-text h1 {
-        font-family: 'Poppins', sans-serif;
-        font-size: 48px;
-        font-weight: 900;
-        margin-bottom: 12px;
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 8px;
+        letter-spacing: -0.5px;
     }
 
     .welcome-text p {
-        font-size: 20px;
-        opacity: 0.95;
-    }
-
-    .vip-badge {
-        background: rgba(255, 255, 255, 0.25);
-        backdrop-filter: blur(10px);
-        padding: 28px 40px;
-        border-radius: 24px;
-        text-align: center;
-    }
-
-    .vip-icon {
-        font-size: 42px;
-        font-weight: 900;
-        margin-bottom: 8px;
-    }
-
-    .vip-label {
         font-size: 16px;
         opacity: 0.9;
-        font-weight: 700;
+        font-weight: 400;
     }
 
+    .user-info {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(10px);
+        padding: 20px 30px;
+        border-radius: 12px;
+        text-align: center;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .user-status {
+        font-size: 14px;
+        opacity: 0.9;
+        font-weight: 500;
+        margin-top: 5px;
+    }
+
+    /* Professional Statistics Cards with Real Images */
     .stats-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 28px;
-        margin-bottom: 56px;
+        gap: 24px;
+        margin-bottom: 50px;
     }
 
     .stat-card {
-        background: linear-gradient(135deg, rgba(99, 102, 241, 0.95), rgba(139, 92, 246, 0.95));
-        padding: 36px;
-        border-radius: 24px;
-        color: #fff;
-        box-shadow: 0 12px 40px rgba(99, 102, 241, 0.3);
-        transition: all 0.3s;
-        position: relative;
+        background: #fff;
+        padding: 0;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
         overflow: hidden;
-    }
-
-    .stat-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        right: 0;
-        width: 100px;
-        height: 100px;
-        background: radial-gradient(circle, rgba(255,255,255,0.1), transparent);
+        border: 1px solid #e5e7eb;
     }
 
     .stat-card:hover {
-        transform: translateY(-8px) scale(1.02);
-        box-shadow: 0 20px 50px rgba(99, 102, 241, 0.4);
+        transform: translateY(-4px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
     }
 
-    .stat-card:nth-child(2) {
-        background: linear-gradient(135deg, rgba(236, 72, 153, 0.95), rgba(244, 114, 182, 0.95));
-        box-shadow: 0 12px 40px rgba(236, 72, 153, 0.3);
+    .stat-image {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     }
 
-    .stat-card:nth-child(2):hover {
-        box-shadow: 0 20px 50px rgba(236, 72, 153, 0.4);
-    }
-
-    .stat-card:nth-child(3) {
-        background: linear-gradient(135deg, rgba(59, 130, 246, 0.95), rgba(96, 165, 250, 0.95));
-        box-shadow: 0 12px 40px rgba(59, 130, 246, 0.3);
-    }
-
-    .stat-card:nth-child(3):hover {
-        box-shadow: 0 20px 50px rgba(59, 130, 246, 0.4);
-    }
-
-    .stat-card:nth-child(4) {
-        background: linear-gradient(135deg, rgba(245, 158, 11, 0.95), rgba(251, 191, 36, 0.95));
-        box-shadow: 0 12px 40px rgba(245, 158, 11, 0.3);
-    }
-
-    .stat-card:nth-child(4):hover {
-        box-shadow: 0 20px 50px rgba(245, 158, 11, 0.4);
-    }
-
-    .stat-icon {
-        font-size: 52px;
-        margin-bottom: 16px;
+    .stat-content {
+        padding: 24px;
     }
 
     .stat-number {
-        font-size: 42px;
-        font-weight: 900;
+        font-size: 36px;
+        font-weight: 700;
+        color: #1e293b;
         margin-bottom: 8px;
     }
 
     .stat-label {
-        font-size: 17px;
-        opacity: 0.95;
-        font-weight: 700;
-    }
-
-    .stat-message {
-        margin-top: 16px;
         font-size: 14px;
-        opacity: 0.85;
-        font-weight: 600;
-    }
-
-    .section-badge {
-        background: linear-gradient(135deg, var(--primary), var(--accent));
-        color: #fff;
-        padding: 10px 28px;
-        border-radius: 50px;
-        font-size: 15px;
-        font-weight: 800;
+        color: #64748b;
+        font-weight: 500;
+        text-transform: uppercase;
         letter-spacing: 0.5px;
     }
 
-    .ai-notice {
-        background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
-        padding: 24px;
-        border-radius: 20px;
-        margin-bottom: 32px;
-        text-align: center;
-        border: 2px solid rgba(99, 102, 241, 0.2);
+    .stat-message {
+        margin-top: 12px;
+        font-size: 13px;
+        color: #475569;
+        padding-top: 12px;
+        border-top: 1px solid #e5e7eb;
     }
 
-    .ai-notice-text {
-        font-size: 16px;
-        color: #475569;
+    /* Section Headers */
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+
+    .section-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: #1e293b;
+    }
+
+    .section-badge {
+        background: #3b82f6;
+        color: #fff;
+        padding: 8px 20px;
+        border-radius: 20px;
+        font-size: 13px;
         font-weight: 600;
     }
 
+    .view-all-link {
+        color: #3b82f6;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 14px;
+        transition: color 0.3s;
+    }
+
+    .view-all-link:hover {
+        color: #2563eb;
+    }
+
+    /* Product Grid */
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 24px;
+        margin-bottom: 50px;
+    }
+
+    .product-card {
+        background: #fff;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        border: 1px solid #e5e7eb;
+    }
+
+    .product-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    .product-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        background: #f1f5f9;
+    }
+
+    .product-content {
+        padding: 20px;
+    }
+
+    .category {
+        display: inline-block;
+        background: #eff6ff;
+        color: #3b82f6;
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 600;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+    }
+
+    .product-card h3 {
+        font-size: 18px;
+        font-weight: 600;
+        color: #1e293b;
+        margin-bottom: 8px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+    }
+
+    .product-card p {
+        font-size: 14px;
+        color: #64748b;
+        margin-bottom: 12px;
+        line-height: 1.5;
+    }
+
+    .rating {
+        color: #f59e0b;
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .price {
+        font-size: 24px;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 15px;
+    }
+
+    .btn {
+        display: inline-block;
+        width: 100%;
+        padding: 12px 24px;
+        background: #3b82f6;
+        color: #fff;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 14px;
+        transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+        background: #2563eb;
+        transform: translateY(-2px);
+    }
+
+    /* AI Notice */
+    .ai-notice {
+        background: #eff6ff;
+        border: 1px solid #bfdbfe;
+        padding: 20px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    .ai-notice-text {
+        font-size: 14px;
+        color: #1e40af;
+        font-weight: 500;
+    }
+
+    /* Purchase History */
     .purchase-history {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(20px);
-        padding: 36px;
-        border-radius: 24px;
-        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
-        margin-bottom: 56px;
+        background: #fff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        margin-bottom: 50px;
+        border: 1px solid #e5e7eb;
     }
 
     .purchase-item {
         display: flex;
         align-items: center;
         gap: 24px;
-        padding: 28px;
-        border-bottom: 2px solid #e2e8f0;
+        padding: 24px 0;
+        border-bottom: 1px solid #e5e7eb;
     }
 
     .purchase-item:last-child {
@@ -198,16 +296,12 @@
     }
 
     .purchase-image {
-        width: 100px;
-        height: 100px;
-        background: linear-gradient(135deg, var(--primary), var(--accent));
-        border-radius: 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 40px;
+        width: 120px;
+        height: 120px;
+        border-radius: 8px;
+        object-fit: cover;
         flex-shrink: 0;
-        box-shadow: 0 8px 24px rgba(99, 102, 241, 0.3);
+        background: #f1f5f9;
     }
 
     .purchase-details {
@@ -215,23 +309,21 @@
     }
 
     .purchase-name {
-        font-size: 20px;
-        font-weight: 800;
+        font-size: 18px;
+        font-weight: 600;
         margin-bottom: 8px;
-        color: var(--dark);
+        color: #1e293b;
     }
 
     .purchase-meta {
         color: #64748b;
-        font-size: 15px;
-        margin-bottom: 6px;
-        font-weight: 600;
+        font-size: 14px;
+        margin-bottom: 4px;
     }
 
     .purchase-date {
         color: #94a3b8;
-        font-size: 14px;
-        font-weight: 600;
+        font-size: 13px;
     }
 
     .purchase-price {
@@ -239,332 +331,342 @@
     }
 
     .purchase-amount {
-        font-size: 28px;
-        font-weight: 900;
-        background: linear-gradient(135deg, var(--primary), var(--secondary));
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        font-size: 24px;
+        font-weight: 700;
+        color: #1e293b;
         margin-bottom: 12px;
     }
 
     .purchase-action {
         display: inline-block;
-        padding: 10px 24px;
+        padding: 10px 20px;
         background: #f8fafc;
-        color: var(--dark);
+        color: #1e293b;
         text-decoration: none;
-        border-radius: 50px;
+        border-radius: 8px;
         font-size: 14px;
-        font-weight: 800;
+        font-weight: 600;
         transition: all 0.3s;
-        border: 2px solid #e2e8f0;
+        border: 1px solid #e5e7eb;
     }
 
     .purchase-action:hover {
-        background: var(--primary);
+        background: #3b82f6;
         color: #fff;
-        border-color: var(--primary);
-        transform: scale(1.05);
+        border-color: #3b82f6;
     }
 
+    /* CTA Section */
     .cta-section {
-        background: linear-gradient(135deg, rgba(99, 102, 241, 0.95), rgba(139, 92, 246, 0.95));
-        padding: 56px 40px;
-        border-radius: 32px;
+        background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+        padding: 50px 40px;
+        border-radius: 16px;
         text-align: center;
         color: #fff;
-        margin-top: 56px;
-        box-shadow: 0 24px 60px rgba(99, 102, 241, 0.3);
+        margin-top: 50px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
     }
 
     .cta-title {
-        font-family: 'Poppins', sans-serif;
-        font-size: 42px;
-        font-weight: 900;
-        margin-bottom: 16px;
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 12px;
     }
 
     .cta-subtitle {
-        font-size: 19px;
-        margin-bottom: 36px;
-        opacity: 0.95;
+        font-size: 16px;
+        margin-bottom: 30px;
+        opacity: 0.9;
     }
 
     .cta-buttons {
         display: flex;
-        gap: 20px;
+        gap: 16px;
         justify-content: center;
         flex-wrap: wrap;
     }
 
     .cta-button {
-        padding: 18px 48px;
+        padding: 14px 32px;
         background: #fff;
-        color: var(--primary);
+        color: #1e3a8a;
         text-decoration: none;
-        border-radius: 50px;
-        font-weight: 800;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        border-radius: 8px;
+        font-weight: 600;
         transition: all 0.3s;
-        font-size: 16px;
+        font-size: 15px;
     }
 
     .cta-button:hover {
-        transform: translateY(-4px) scale(1.05);
-        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
     }
 
     .cta-button-secondary {
         background: transparent;
         color: #fff;
-        border: 3px solid #fff;
+        border: 2px solid #fff;
     }
 
     .cta-button-secondary:hover {
         background: #fff;
-        color: var(--primary);
+        color: #1e3a8a;
     }
 
+    /* Empty State */
     .empty-state {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(20px);
-        padding: 80px 48px;
-        border-radius: 32px;
+        background: #fff;
+        padding: 60px 40px;
+        border-radius: 12px;
         text-align: center;
-        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        border: 1px solid #e5e7eb;
     }
 
     .empty-icon {
-        font-size: 80px;
-        margin-bottom: 24px;
+        font-size: 64px;
+        margin-bottom: 20px;
     }
 
     .empty-title {
-        font-size: 28px;
-        font-weight: 900;
+        font-size: 24px;
+        font-weight: 700;
         margin-bottom: 12px;
-        color: var(--dark);
+        color: #1e293b;
+    }
+
+    .empty-text {
+        color: #64748b;
+        margin-bottom: 30px;
+        font-size: 16px;
     }
 
     @media (max-width: 768px) {
-        .dashboard-header { padding: 40px 28px; }
-        .welcome-text h1 { font-size: 36px; }
+        .dashboard-header { padding: 30px 20px; }
+        .welcome-text h1 { font-size: 24px; }
         .stats-grid { grid-template-columns: 1fr; }
+        .product-grid { grid-template-columns: 1fr; }
         .purchase-item { flex-direction: column; text-align: center; }
         .purchase-price { text-align: center; margin-top: 16px; }
+        .cta-buttons { flex-direction: column; }
     }
 </style>
 
-<!-- Dashboard Header -->
-<div class="dashboard-header">
-    <div class="dashboard-content">
-        <div class="welcome-text">
-            <h1>Welcome back, {{ user.username }}! 👋</h1>
-            <p>Here are your personalized recommendations</p>
-        </div>
-        <div class="vip-badge">
-            <div class="vip-icon">⭐ VIP</div>
-            <div class="vip-label">Premium Member</div>
-        </div>
-    </div>
-</div>
-
-<!-- User Statistics -->
-<div class="stats-grid">
-    <div class="stat-card">
-        <div class="stat-icon">🛍️</div>
-        <div class="stat-number">{{ total_purchases }}</div>
-        <div class="stat-label">Total Purchases</div>
-        <div class="stat-message">
-            {% if total_purchases > 10 %}🎉 You're a top shopper!
-            {% elif total_purchases > 5 %}💪 Keep it up!
-            {% else %}🌟 Start your journey!{% endif %}
-        </div>
-    </div>
-
-    <div class="stat-card">
-        <div class="stat-icon">⭐</div>
-        <div class="stat-number">{{ total_ratings }}</div>
-        <div class="stat-label">Products Rated</div>
-        <div class="stat-message">
-            {% if total_ratings > 20 %}🏆 Review Champion!
-            {% elif total_ratings > 10 %}📝 Great contributor!
-            {% else %}✍️ Share your thoughts!{% endif %}
-        </div>
-    </div>
-
-    <div class="stat-card">
-        <div class="stat-icon">👀</div>
-        <div class="stat-number">{{ total_views }}</div>
-        <div class="stat-label">Products Viewed</div>
-        <div class="stat-message">
-            {% if total_views > 50 %}🔥 Active explorer!
-            {% elif total_views > 20 %}🚀 Good browsing!
-            {% else %}🌈 Discover more!{% endif %}
-        </div>
-    </div>
-
-    <div class="stat-card">
-        <div class="stat-icon">🎯</div>
-        <div class="stat-number">{{ personalized_recommendations.count }}</div>
-        <div class="stat-label">AI Recommendations</div>
-        <div class="stat-message">🤖 Powered by AI</div>
-    </div>
-</div>
-
-<!-- Recently Viewed -->
-{% if recently_viewed %}
-<div>
-    <div class="section-header">
-        <h2 class="section-title">👀 Recently Viewed</h2>
-        <a href="{% url 'home' %}" class="view-all-link">Browse More →</a>
-    </div>
-
-    <div class="product-grid">
-        {% for product in recently_viewed %}
-        <div class="product-card">
-            <div class="product-image" style="height:150px; display:flex; align-items:center; justify-content:center; background:#f1f5f9; border-radius:12px;">
-    {% if product.image %}
-        <img src="{{ product.image.url }}" alt="{{ product.name }}" style="max-width:100%; max-height:100%; object-fit:cover; border-radius:12px;">
-    {% else %}
-        <span style="font-size:2.5em;">🛍️</span>
-    {% endif %}
-</div>
-
-            <div class="product-content">
-                <span class="category">{{ product.category.name }}</span>
-                <h3>{{ product.name }}</h3>
-                <p>{{ product.description|truncatewords:12 }}</p>
-                <div class="rating">⭐ {{ product.average_rating|floatformat:1 }}</div>
-                <div class="price">₹{{ product.price }}</div>
-                <a href="{% url 'product_detail' product.id %}" class="btn">View Again</a>
+<div class="container">
+    <!-- Professional Dashboard Header -->
+    <div class="dashboard-header">
+        <div class="dashboard-content">
+            <div class="welcome-text">
+                <h1>Welcome back, {{ user.username }}</h1>
+                <p>Here's your personalized shopping dashboard</p>
+            </div>
+            <div class="user-info">
+                <div style="font-size: 18px; font-weight: 600;">Active Member</div>
+                <div class="user-status">Member since {{ user.date_joined|date:"M Y" }}</div>
             </div>
         </div>
-        {% endfor %}
-    </div>
-</div>
-{% endif %}
-
-<!-- Personalized Recommendations -->
-<div style="margin-top: 56px;">
-    <div class="section-header">
-        <h2 class="section-title">🎯 Recommended For You</h2>
-        <span class="section-badge">AI Powered</span>
     </div>
 
-    <div class="ai-notice">
-        <p class="ai-notice-text">💡 These recommendations are based on your browsing history, purchases, and ratings</p>
-    </div>
-
-    {% if personalized_recommendations %}
-    <div class="product-grid">
-        {% for product in personalized_recommendations %}
-        <div class="product-card">
-            <div class="product-image" style="height:150px; display:flex; align-items:center; justify-content:center; background:#f1f5f9; border-radius:12px; margin-bottom:15px;">
-    {% if product.image %}
-        <img src="{{ product.image.url }}" alt="{{ product.name }}" style="max-width:100%; max-height:100%; object-fit:cover; border-radius:12px;">
-    {% else %}
-        <span style="font-size:2.5em;">🛍️</span>
-    {% endif %}
-</div>
-
-            <div class="product-content">
-                <span class="category">{{ product.category.name }}</span>
-                <h3>{{ product.name }}</h3>
-                <p>{{ product.description|truncatewords:12 }}</p>
-                <div class="rating">⭐ {{ product.average_rating|floatformat:1 }}</div>
-                <div class="price">₹{{ product.price }}</div>
-                <a href="{% url 'product_detail' product.id %}" class="btn">View Details</a>
+    <!-- Professional Statistics with Real Images -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <img src="https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?w=500&h=300&fit=crop" alt="Shopping bags" class="stat-image">
+            <div class="stat-content">
+                <div class="stat-number">{{ total_purchases }}</div>
+                <div class="stat-label">Total Purchases</div>
+                <div class="stat-message">
+                    {% if total_purchases > 10 %}You're one of our valued customers
+                    {% elif total_purchases > 5 %}Great shopping activity
+                    {% else %}Start your shopping journey{% endif %}
+                </div>
             </div>
         </div>
-        {% endfor %}
-    </div>
-    {% else %}
-    <div class="empty-state">
-        <div class="empty-icon">🎯</div>
-        <h3 class="empty-title">Start Building Your Profile</h3>
-        <p style="color: #64748b; margin-bottom: 32px; font-size: 17px;">Browse products and make purchases to get personalized recommendations</p>
-        <a href="{% url 'home' %}" class="empty-action cta-button">Start Shopping</a>
-    </div>
-    {% endif %}
-</div>
 
-<!-- Recent Purchase History -->
-{% if recent_purchases %}
-<div style="margin-top: 56px;">
-    <div class="section-header">
-        <h2 class="section-title">📦 Recent Purchases</h2>
+        <div class="stat-card">
+            <img src="https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=500&h=300&fit=crop" alt="Star ratings" class="stat-image">
+            <div class="stat-content">
+                <div class="stat-number">{{ total_ratings }}</div>
+                <div class="stat-label">Products Rated</div>
+                <div class="stat-message">
+                    {% if total_ratings > 20 %}Thank you for your valuable feedback
+                    {% elif total_ratings > 10 %}Your reviews help others
+                    {% else %}Share your experience{% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=500&h=300&fit=crop" alt="Product browsing" class="stat-image">
+            <div class="stat-content">
+                <div class="stat-number">{{ total_views }}</div>
+                <div class="stat-label">Products Viewed</div>
+                <div class="stat-message">
+                    {% if total_views > 50 %}Active product explorer
+                    {% elif total_views > 20 %}Keep discovering
+                    {% else %}Browse our collection{% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?w=500&h=300&fit=crop" alt="AI recommendations" class="stat-image">
+            <div class="stat-content">
+                <div class="stat-number">{{ personalized_recommendations.count }}</div>
+                <div class="stat-label">AI Recommendations</div>
+                <div class="stat-message">Personalized for you</div>
+            </div>
+        </div>
     </div>
 
-    <div class="purchase-history">
-        {% for purchase in recent_purchases %}
-        <div class="purchase-item" style="display:flex; align-items:center; gap:24px; padding:28px; border-bottom:2px solid #e2e8f0;">
-            
-            <!-- Product Image -->
-            <div class="purchase-image" style="width:150px; height:150px; display:flex; align-items:center; justify-content:center; background:#f1f5f9; border-radius:12px; flex-shrink:0;">
-                {% if purchase.product.image %}
-                    <img src="{{ purchase.product.image.url }}" alt="{{ purchase.product.name }}" style="max-width:100%; max-height:100%; object-fit:cover; border-radius:12px;">
+    <!-- Recently Viewed -->
+    {% if recently_viewed %}
+    <div>
+        <div class="section-header">
+            <h2 class="section-title">Recently Viewed</h2>
+            <a href="{% url 'home' %}" class="view-all-link">Browse More →</a>
+        </div>
+
+        <div class="product-grid">
+            {% for product in recently_viewed %}
+            <div class="product-card">
+                {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
                 {% else %}
-                    <span style="font-size:2.5em;">🛍️</span>
+                <div class="product-image" style="display:flex; align-items:center; justify-content:center; background:#f1f5f9;">
+                    <span style="font-size:48px; color:#cbd5e1;">📦</span>
+                </div>
                 {% endif %}
-            </div>
 
-            <!-- Product Details -->
-            <div class="purchase-details" style="flex:1;">
-                <h4 class="purchase-name">{{ purchase.product.name }}</h4>
-                <p class="purchase-meta">Quantity: {{ purchase.quantity }} | Category: {{ purchase.product.category.name }}</p>
-                <p class="purchase-date">Purchased on {{ purchase.purchased_at|date:"M d, Y" }}</p>
+                <div class="product-content">
+                    <span class="category">{{ product.category.name }}</span>
+                    <h3>{{ product.name }}</h3>
+                    <p>{{ product.description|truncatewords:12 }}</p>
+                    <div class="rating">★ {{ product.average_rating|floatformat:1 }}</div>
+                    <div class="price">₹{{ product.price }}</div>
+                    <a href="{% url 'product_detail' product.id %}" class="btn">View Again</a>
+                </div>
             </div>
-
-            <!-- Price & Action -->
-            <div class="purchase-price" style="text-align:right;">
-                <div class="purchase-amount">₹{{ purchase.product.price }}</div>
-                <a href="{% url 'product_detail' purchase.product.id %}" class="purchase-action" style="display:inline-block; padding:10px 24px; background:#f8fafc; color:#1f2937; text-decoration:none; border-radius:50px; font-weight:600; border:2px solid #e2e8f0; transition:all 0.3s;">View Product</a>
-            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
-</div>
-{% endif %}
-
-
-<!-- Popular Products -->
-<div style="margin-top: 56px;">
-    <div class="section-header">
-        <h2 class="section-title">🔥 Trending Now</h2>
-    </div>
-
-    <div class="product-grid">
-        {% for product in popular_products %}
-        <div class="product-card">
-            <div class="product-image" style="height:150px; display:flex; align-items:center; justify-content:center; background:#f1f5f9; border-radius:12px; margin-bottom:15px;">
-    {% if product.image %}
-        <img src="{{ product.image.url }}" alt="{{ product.name }}" style="max-width:100%; max-height:100%; object-fit:cover; border-radius:12px;">
-    {% else %}
-        <span style="font-size:2.5em;">🛍️</span>
     {% endif %}
-</div>
 
-            <div class="product-content">
-                <span class="category">{{ product.category.name }}</span>
-                <h3>{{ product.name }}</h3>
-                <p>{{ product.description|truncatewords:12 }}</p>
-                <div class="rating">⭐ {{ product.average_rating|floatformat:1 }}</div>
-                <div class="price">₹{{ product.price }}</div>
-                <a href="{% url 'product_detail' product.id %}" class="btn">View Details</a>
-            </div>
+    <!-- Personalized Recommendations -->
+    <div style="margin-top: 50px;">
+        <div class="section-header">
+            <h2 class="section-title">Recommended For You</h2>
+            <span class="section-badge">AI Powered</span>
         </div>
-        {% endfor %}
-    </div>
-</div>
 
-<!-- Call to Action -->
-<div class="cta-section">
-    <h2 class="cta-title">Keep Exploring!</h2>
-    <p class="cta-subtitle">The more you shop and rate products, the better our recommendations become</p>
-    <div class="cta-buttons">
-        <a href="{% url 'home' %}" class="cta-button">Browse All Products</a>
-        <a href="{% url 'cart' %}" class="cta-button cta-button-secondary">View Cart ({{ cart_count }})</a>
+        <div class="ai-notice">
+            <p class="ai-notice-text">These recommendations are based on your browsing history, purchases, and ratings</p>
+        </div>
+
+        {% if personalized_recommendations %}
+        <div class="product-grid">
+            {% for product in personalized_recommendations %}
+            <div class="product-card">
+                {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
+                {% else %}
+                <div class="product-image" style="display:flex; align-items:center; justify-content:center; background:#f1f5f9;">
+                    <span style="font-size:48px; color:#cbd5e1;">📦</span>
+                </div>
+                {% endif %}
+
+                <div class="product-content">
+                    <span class="category">{{ product.category.name }}</span>
+                    <h3>{{ product.name }}</h3>
+                    <p>{{ product.description|truncatewords:12 }}</p>
+                    <div class="rating">★ {{ product.average_rating|floatformat:1 }}</div>
+                    <div class="price">₹{{ product.price }}</div>
+                    <a href="{% url 'product_detail' product.id %}" class="btn">View Details</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <div class="empty-icon">🎯</div>
+            <h3 class="empty-title">Start Building Your Profile</h3>
+            <p class="empty-text">Browse products and make purchases to get personalized recommendations</p>
+            <a href="{% url 'home' %}" class="cta-button">Start Shopping</a>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Recent Purchase History -->
+    {% if recent_purchases %}
+    <div style="margin-top: 50px;">
+        <div class="section-header">
+            <h2 class="section-title">Recent Purchases</h2>
+        </div>
+
+        <div class="purchase-history">
+            {% for purchase in recent_purchases %}
+            <div class="purchase-item">
+                {% if purchase.product.image %}
+                <img src="{{ purchase.product.image.url }}" alt="{{ purchase.product.name }}" class="purchase-image">
+                {% else %}
+                <div class="purchase-image" style="display:flex; align-items:center; justify-content:center; background:#f1f5f9;">
+                    <span style="font-size:40px; color:#cbd5e1;">📦</span>
+                </div>
+                {% endif %}
+
+                <div class="purchase-details">
+                    <h4 class="purchase-name">{{ purchase.product.name }}</h4>
+                    <p class="purchase-meta">Quantity: {{ purchase.quantity }} | Category: {{ purchase.product.category.name }}</p>
+                    <p class="purchase-date">Purchased on {{ purchase.purchased_at|date:"M d, Y" }}</p>
+                </div>
+
+                <div class="purchase-price">
+                    <div class="purchase-amount">₹{{ purchase.product.price }}</div>
+                    <a href="{% url 'product_detail' purchase.product.id %}" class="purchase-action">View Product</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Popular Products -->
+    <div style="margin-top: 50px;">
+        <div class="section-header">
+            <h2 class="section-title">Trending Now</h2>
+        </div>
+
+        <div class="product-grid">
+            {% for product in popular_products %}
+            <div class="product-card">
+                {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
+                {% else %}
+                <div class="product-image" style="display:flex; align-items:center; justify-content:center; background:#f1f5f9;">
+                    <span style="font-size:48px; color:#cbd5e1;">📦</span>
+                </div>
+                {% endif %}
+
+                <div class="product-content">
+                    <span class="category">{{ product.category.name }}</span>
+                    <h3>{{ product.name }}</h3>
+                    <p>{{ product.description|truncatewords:12 }}</p>
+                    <div class="rating">★ {{ product.average_rating|floatformat:1 }}</div>
+                    <div class="price">₹{{ product.price }}</div>
+                    <a href="{% url 'product_detail' product.id %}" class="btn">View Details</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="cta-section">
+        <h2 class="cta-title">Keep Exploring</h2>
+        <p class="cta-subtitle">The more you shop and rate products, the better our recommendations become</p>
+        <div class="cta-buttons">
+            <a href="{% url 'home' %}" class="cta-button">Browse All Products</a>
+            <a href="{% url 'cart' %}" class="cta-button cta-button-secondary">View Cart ({{ cart_count }})</a>
+        </div>
     </div>
 </div>
 

@@ -18,24 +18,33 @@
     </div>
     
     <div style="margin: 30px 0;">
-        <a href="/" class="btn" style="margin: 0 10px;">Continue Shopping</a>
+        <a href="/" class="btn" style="margin:10px;">Continue Shopping</a>
         <a href="{% url 'my_recommendations' %}" class="btn btn-success" style="margin: 0 10px;">View Recommendations</a>
     </div>
 </div>
 
 {% if recommendations %}
-<h2 class="section-title">🎁 Customers Also Bought</h2>
-<div class="product-grid">
-    {% for rec in recommendations %}
-    <div class="product-card">
-        <h3>{{ rec.name }}</h3>
-        <span class="category">{{ rec.category.name }}</span>
-        <p>{{ rec.description|truncatewords:12 }}</p>
-        <div class="rating">⭐ {{ rec.average_rating|floatformat:1 }}</div>
-        <div class="price">${{ rec.price }}</div>
-        <a href="{% url 'product_detail' rec.id %}" class="btn">View Details →</a>
+<div style="margin: 50px auto; max-width: 1000px;">
+    <h2 class="section-title" style="margin-bottom: 20px;">🎁 Customers Also Bought</h2>
+    <div class="product-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 24px;">
+        {% for rec in recommendations %}
+        <div class="product-card" style="background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-align: center;">
+            <div style="height: 150px; display:flex; align-items:center; justify-content:center; background: #f1f5f9; border-radius: 12px; margin-bottom: 15px;">
+                {% if rec.image %}
+                    <img src="{{ rec.image.url }}" alt="{{ rec.name }}" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                {% else %}
+                    <span style="font-size: 3em;">🛍️</span>
+                {% endif %}
+            </div>
+            <span class="category" style="font-size: 0.8em; color: #94a3b8;">{{ rec.category.name }}</span>
+            <h3 style="font-size: 1.1em; margin: 8px 0;">{{ rec.name }}</h3>
+            <p style="font-size: 0.9em; color: #64748b;">{{ rec.description|truncatewords:12 }}</p>
+            <div style="font-weight: 700; color: #27ae60; margin: 8px 0;">₹{{ rec.price }}</div>
+            <div style="color: #f59e0b; font-weight: 700;">⭐ {{ rec.average_rating|floatformat:1 }}</div>
+            <a href="{% url 'product_detail' rec.id %}" class="btn" style="margin-top: 10px; display: inline-block;">View Details →</a>
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
 </div>
 {% endif %}
 {% endblock %}

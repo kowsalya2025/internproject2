@@ -13,7 +13,19 @@ class ProductAdmin(admin.ModelAdmin):
     list_filter = ('category',)
     search_fields = ('name',)
     readonly_fields = ('created_at',)
-    fields = ('name', 'category', 'price', 'image', 'created_at') 
+
+    fields = (
+        'name',
+        'category',
+        'price',
+        'image',     # main image
+        'image1',    # extra image
+        'image2',    # extra image
+        'image3',    # extra image
+        'image4',    # extra image
+        'created_at',
+    )
+
 
 
 @admin.register(Rating)
