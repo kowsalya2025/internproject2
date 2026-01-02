@@ -7,12 +7,20 @@
     <meta name="description" content="{% block meta_description %}Professional E-Commerce Platform{% endblock %}">
     <title>{% block title %}ShopHub - Smart Shopping{% endblock %}</title>
     <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amazon+Ember:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <style>
         :root {
-            --primary: #2563eb;
+            --amazon-orange: #ff9900;
+            --amazon-dark: #131921;
+            --amazon-light: #232f3e;
+            --flipkart-blue: #2874f0;
+            --border-gray: #ddd;
+            --text-dark: #0f1111;
+            --text-light: #565959;
+
+             --primary: #2563eb;
             --primary-dark: #1e40af;
             --secondary: #475569;
             --accent: #3b82f6;
@@ -31,403 +39,386 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background: #f5f7fa;
-            color: #1e293b;
+            font-family: 'Amazon Ember', Arial, sans-serif;
+            background: #f3f3f3;
+            color: var(--text-dark);
             line-height: 1.6;
-            overflow-x: hidden;
         }
 
-        /* Professional Navbar */
-        .navbar {
-            background: #fff;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .top-bar {
-            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
-            padding: 10px 0;
-            font-size: 13px;
+        /* Main Header - Dark Blue/Black */
+        .main-header {
+            background: var(--amazon-dark);
             color: #fff;
+            padding: 0;
         }
 
-        .top-bar-content {
-            max-width: 1400px;
+        .header-top {
+            display: flex;
+            align-items: center;
+            padding: 8px 16px;
+            gap: 16px;
+            max-width: 1500px;
             margin: 0 auto;
-            padding: 0 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
         }
 
-        .announcement {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 500;
-        }
-
-        .announcement-icon {
-            font-size: 16px;
-        }
-
-        .top-bar-links {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .top-bar-links a {
-            color: rgba(255, 255, 255, 0.9);
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s;
-            font-size: 13px;
-        }
-
-        .top-bar-links a:hover {
-            color: #fff;
-        }
-
-        .nav-main {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 16px 24px;
-            display: flex;
-            align-items: center;
-            gap: 32px;
-        }
-
-        /* Professional Logo */
+        /* Logo */
         .logo {
+            padding: 8px 12px;
+            border: 1px solid transparent;
+            border-radius: 2px;
+            text-decoration: none;
             display: flex;
             align-items: center;
-            gap: 12px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 24px;
-            color: var(--dark);
-            transition: transform 0.3s;
+            gap: 4px;
+            transition: border 0.2s;
         }
 
         .logo:hover {
-            transform: scale(1.05);
+            border: 1px solid #fff;
         }
 
-        .logo-icon {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, #2563eb, #3b82f6);
-            border-radius: 12px;
+        .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-text .dot {
+            color: var(--amazon-orange);
+        }
+
+        .logo-domain {
+            font-size: 11px;
+            color: #fff;
+            font-weight: 400;
+        }
+
+        /* Deliver To */
+        .deliver-to {
+            padding: 8px 12px;
+            border: 1px solid transparent;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: border 0.2s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .deliver-to:hover {
+            border: 1px solid #fff;
+        }
+
+        .deliver-label {
+            font-size: 12px;
+            color: #ccc;
+            font-weight: 400;
+        }
+
+        .deliver-location {
+            font-size: 14px;
+            font-weight: 700;
+            color: #fff;
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            gap: 4px;
+        }
+
+        /* Search Bar */
+        .search-wrapper {
+            flex: 1;
+            max-width: 900px;
         }
 
         .search-container {
-            flex: 1;
-            max-width: 600px;
-        }
-
-        .search-box {
             display: flex;
-            background: #f8fafc;
-            border-radius: 8px;
+            height: 40px;
+            border-radius: 4px;
             overflow: hidden;
-            border: 1px solid var(--border);
-            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
 
-        .search-box:focus-within {
-            border-color: var(--primary);
-            background: #fff;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        .search-category {
+            background: #f3f3f3;
+            border: none;
+            padding: 0 12px;
+            font-size: 12px;
+            color: var(--text-dark);
+            cursor: pointer;
+            border-right: 1px solid #cdcdcd;
+            min-width: 50px;
         }
 
-        .search-box input {
+        .search-category:hover {
+            background: #dadada;
+        }
+
+        .search-input {
             flex: 1;
             border: none;
-            padding: 12px 16px;
-            font-size: 14px;
+            padding: 0 12px;
+            font-size: 15px;
             outline: none;
-            background: transparent;
-            color: var(--dark);
         }
 
-        .search-box input::placeholder {
-            color: #94a3b8;
-        }
-
-        .search-box button {
-            background: var(--primary);
+        .search-button {
+            background: var(--amazon-orange);
             border: none;
-            padding: 0 24px;
-            color: #fff;
-            font-weight: 600;
+            padding: 0 20px;
             cursor: pointer;
-            transition: all 0.3s;
-            font-size: 14px;
+            transition: background 0.2s;
         }
 
-        .search-box button:hover {
-            background: var(--primary-dark);
+        .search-button:hover {
+            background: #f39c12;
         }
 
-        .nav-actions {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .nav-item {
-            color: var(--dark);
-            text-decoration: none;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            font-size: 12px;
-            font-weight: 600;
-            transition: all 0.3s;
-            padding: 8px 12px;
-            border-radius: 8px;
-            position: relative;
-        }
-
-        .nav-item:hover {
-            background: #f8fafc;
-            color: var(--primary);
-        }
-
-        .nav-item-special {
-            background: var(--primary);
-            color: #fff;
-            padding: 8px 16px;
-            border-radius: 8px;
-            flex-direction: row;
-            gap: 8px;
-        }
-
-        .nav-item-special:hover {
-            background: var(--primary-dark);
-            color: #fff;
-        }
-
-        .nav-item-icon {
+        .search-button i {
+            color: var(--text-dark);
             font-size: 20px;
         }
 
-        .badge {
-            position: absolute;
-            top: 4px;
-            right: 4px;
-            background: var(--danger);
-            color: #fff;
-            font-size: 10px;
-            font-weight: 700;
-            padding: 2px 6px;
-            border-radius: 10px;
-            min-width: 18px;
-            text-align: center;
-        }
-
-        .categories-bar {
-            background: #fff;
-            border-top: 1px solid var(--border);
-        }
-
-        .categories-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 24px;
-            display: flex;
-            gap: 32px;
-            overflow-x: auto;
-            scrollbar-width: thin;
-        }
-
-        .categories-content::-webkit-scrollbar {
-            height: 4px;
-        }
-
-        .categories-content::-webkit-scrollbar-thumb {
-            background: var(--primary);
-            border-radius: 4px;
-        }
-
-        .category-link {
-            color: var(--dark);
+        /* Header Links */
+        .header-link {
+            padding: 8px 12px;
+            border: 1px solid transparent;
+            border-radius: 2px;
             text-decoration: none;
-            padding: 14px 0;
-            font-size: 14px;
-            font-weight: 600;
+            display: flex;
+            flex-direction: column;
+            transition: border 0.2s;
             white-space: nowrap;
+        }
+
+        .header-link:hover {
+            border: 1px solid #fff;
+        }
+
+        .header-link-top {
+            font-size: 12px;
+            color: #ccc;
+            font-weight: 400;
+        }
+
+        .header-link-bottom {
+            font-size: 14px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        /* Returns & Orders */
+        .returns-orders {
+            padding: 8px 12px;
+            border: 1px solid transparent;
+            border-radius: 2px;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            transition: border 0.2s;
+        }
+
+        .returns-orders:hover {
+            border: 1px solid #fff;
+        }
+
+        /* Cart */
+        .cart-link {
+            padding: 8px 12px;
+            border: 1px solid transparent;
+            border-radius: 2px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: border 0.2s;
             position: relative;
-            transition: all 0.3s;
         }
 
-        .category-link:hover {
-            color: var(--primary);
+        .cart-link:hover {
+            border: 1px solid #fff;
         }
 
-        .category-link::after {
-            content: '';
+        .cart-icon-wrapper {
+            position: relative;
+            font-size: 32px;
+            color: #fff;
+        }
+
+        .cart-count {
             position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 3px;
-            background: var(--primary);
-            transition: width 0.3s;
+            top: -8px;
+            right: -8px;
+            background: var(--amazon-orange);
+            color: var(--text-dark);
+            font-size: 14px;
+            font-weight: 700;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .category-link:hover::after {
-            width: 100%;
+        .cart-text {
+            font-size: 14px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        /* Secondary Navigation */
+        .nav-secondary {
+            background: var(--amazon-light);
+            padding: 8px 16px;
+        }
+
+        .nav-secondary-content {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            max-width: 1500px;
+            margin: 0 auto;
+        }
+
+        .nav-menu-button {
+            background: none;
+            border: 1px solid transparent;
+            color: #fff;
+            padding: 8px 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            font-weight: 700;
+            border-radius: 2px;
+            transition: border 0.2s;
+        }
+
+        .nav-menu-button:hover {
+            border: 1px solid #fff;
+        }
+
+        .nav-menu-button i {
+            font-size: 18px;
+        }
+
+        .nav-categories {
+            display: flex;
+            gap: 20px;
+            flex: 1;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .nav-categories::-webkit-scrollbar {
+            display: none;
+        }
+
+        .nav-category {
+            color: #fff;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 400;
+            white-space: nowrap;
+            padding: 4px 0;
+            border-bottom: 2px solid transparent;
+            transition: border 0.2s;
+        }
+
+        .nav-category:hover {
+            border-bottom: 2px solid var(--amazon-orange);
         }
 
         /* Main Content */
         .main-container {
-            max-width: 1400px;
+            max-width: 1500px;
             margin: 0 auto;
-            padding: 32px 24px;
+            padding: 20px 16px;
             min-height: calc(100vh - 400px);
         }
 
         /* Messages */
         .messages {
-            max-width: 1400px;
-            margin: 20px auto;
-            padding: 0 24px;
+            max-width: 1500px;
+            margin: 16px auto;
+            padding: 0 16px;
         }
 
         .alert {
-            padding: 16px 20px;
-            border-radius: 8px;
+            padding: 14px 20px;
+            border-radius: 4px;
             margin-bottom: 12px;
             display: flex;
             align-items: center;
             gap: 12px;
-            animation: slideIn 0.3s ease;
-            font-weight: 500;
             font-size: 14px;
-            border: 1px solid;
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
+            border-left: 4px solid;
         }
 
         .alert-success {
-            background: #d1fae5;
-            color: #065f46;
-            border-color: #a7f3d0;
+            background: #d4edda;
+            color: #155724;
+            border-left-color: #28a745;
         }
 
         .alert-error {
-            background: #fee2e2;
-            color: #991b1b;
-            border-color: #fecaca;
+            background: #f8d7da;
+            color: #721c24;
+            border-left-color: #dc3545;
         }
 
         .alert-warning {
-            background: #fef3c7;
-            color: #92400e;
-            border-color: #fde68a;
+            background: #fff3cd;
+            color: #856404;
+            border-left-color: #ffc107;
         }
 
         .alert-info {
-            background: #dbeafe;
-            color: #1e40af;
-            border-color: #bfdbfe;
+            background: #d1ecf1;
+            color: #0c5460;
+            border-left-color: #17a2b8;
         }
 
         /* Product Grid */
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-        }
-
-        .section-title {
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--dark);
-        }
-
-        .view-all-link {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        .view-all-link:hover {
-            text-decoration: underline;
-        }
-
         .product-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 24px;
-            margin: 24px 0;
+            gap: 20px;
+            margin: 20px 0;
         }
 
         .product-card {
             background: #fff;
-            border-radius: 12px;
+            border-radius: 4px;
             overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
             transition: all 0.3s;
-            border: 1px solid var(--border);
+            border: 1px solid #ddd;
+            padding: 16px;
         }
 
         .product-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transform: translateY(-2px);
         }
 
         .product-image {
             width: 100%;
-            height: 200px;
-            object-fit: cover;
-            background: #f1f5f9;
+            height: 280px;
+            object-fit: contain;
+            background: #fff;
+            padding: 16px;
         }
 
         .product-content {
-            padding: 20px;
+            padding-top: 12px;
         }
 
-        .category {
-            display: inline-block;
-            background: #eff6ff;
-            color: var(--primary);
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 600;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-        }
-
-        .product-card h3 {
-            font-size: 18px;
-            font-weight: 600;
-            margin: 10px 0;
-            color: var(--dark);
+        .product-title {
+            font-size: 16px;
+            font-weight: 400;
+            color: var(--text-dark);
+            margin-bottom: 8px;
             overflow: hidden;
             text-overflow: ellipsis;
             display: -webkit-box;
@@ -435,411 +426,418 @@
             -webkit-box-orient: vertical;
         }
 
-        .product-card p {
-            color: #64748b;
-            font-size: 14px;
-            margin: 10px 0;
-            line-height: 1.5;
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 8px;
         }
 
-        .rating {
-            color: #f59e0b;
-            font-weight: 600;
-            margin: 10px 0;
+        .stars {
+            color: var(--amazon-orange);
             font-size: 14px;
         }
 
-        .price {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--dark);
-            margin: 12px 0;
+        .rating-count {
+            color: var(--flipkart-blue);
+            font-size: 13px;
         }
 
-        .btn {
-            display: block;
-            width: 100%;
-            padding: 12px;
-            background: var(--primary);
-            color: #fff;
-            text-align: center;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: all 0.3s;
-            border: none;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        .btn:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-        }
-
-        /* Professional Footer with Real Images */
-        .footer {
-            background: linear-gradient(135deg, #1e293b, #0f172a);
-            color: #fff;
-            margin-top: 60px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .footer::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
-        }
-
-        /* Newsletter Section with Background Image */
-        .footer-newsletter {
-            background: url('https://images.unsplash.com/photo-1557821552-17105176677c?w=1600&h=400&fit=crop') center/cover;
-            position: relative;
-            padding: 60px 24px;
-        }
-
-        .footer-newsletter::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(124, 144, 199, 0.95), rgba(130, 164, 237, 0.95));
-        }
-
-        .newsletter-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            text-align: center;
-            position: relative;
-            z-index: 1;
-        }
-
-        .newsletter-title {
-            font-size: 32px;
-            font-weight: 700;
+        .product-price {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
             margin-bottom: 12px;
         }
 
-        .newsletter-subtitle {
-            font-size: 16px;
-            margin-bottom: 30px;
-            opacity: 0.9;
+        .price-symbol {
+            font-size: 12px;
+            color: var(--text-dark);
         }
 
-        .newsletter-form {
-            display: flex;
-            max-width: 500px;
-            margin: 0 auto;
-            gap: 12px;
+        .price-value {
+            font-size: 28px;
+            font-weight: 500;
+            color: var(--text-dark);
         }
 
-        .newsletter-form input {
-            flex: 1;
-            padding: 14px 20px;
-            border: none;
-            border-radius: 8px;
+        .price-original {
             font-size: 14px;
-            outline: none;
+            color: var(--text-light);
+            text-decoration: line-through;
         }
 
-        .newsletter-form button {
-            padding: 14px 32px;
-            background: #fff;
-            color: var(--primary);
+        .product-delivery {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-bottom: 12px;
+        }
+
+        .delivery-free {
+            color: #007600;
+            font-weight: 500;
+        }
+
+        .btn-add-cart {
+            width: 100%;
+            padding: 10px;
+            background: var(--amazon-orange);
+            color: var(--text-dark);
             border: none;
-            border-radius: 8px;
-            font-weight: 600;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: background 0.2s;
         }
 
-        .newsletter-form button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        .btn-add-cart:hover {
+            background: #f39c12;
         }
 
-        /* Footer Content */
+        /* Footer */
+        .footer {
+            background: var(--amazon-light);
+            color: #ddd;
+            margin-top: 40px;
+        }
+
+        .footer-top {
+            background: var(--amazon-dark);
+            padding: 16px;
+            text-align: center;
+        }
+
+        .footer-top a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .footer-top a:hover {
+            text-decoration: underline;
+        }
+
         .footer-content {
-            max-width: 1400px;
+            max-width: 1500px;
             margin: 0 auto;
-            padding: 50px 24px 30px;
+            padding: 40px 16px;
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 40px;
         }
 
         .footer-section h3 {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 700;
-            margin-bottom: 20px;
             color: #fff;
+            margin-bottom: 16px;
         }
 
         .footer-section ul {
             list-style: none;
-            padding: 0;
         }
 
         .footer-section li {
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
 
         .footer-section a {
-            color: rgba(255, 255, 255, 0.7);
+            color: #ddd;
             text-decoration: none;
-            transition: all 0.3s;
-            font-size: 14px;
-            display: inline-block;
+            font-size: 13px;
+            transition: color 0.2s;
         }
 
         .footer-section a:hover {
-            color: var(--accent);
-            transform: translateX(4px);
-        }
-
-        /* Social Links */
-        .social-links {
-            display: flex;
-            gap: 12px;
-            margin-top: 16px;
-        }
-
-        .social-link {
-            width: 54px;
-            height: 54px;
-            text-align: center;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
             color: #fff;
-            transition: all 0.3s;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-decoration: underline;
         }
 
-        .social-link:hover {
-            text-align: center;
-            background: var(--primary);
-            transform: translateY(-4px);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
-        }
-
-        /* Payment Methods */
-        .payment-methods {
-            display: flex;
-            gap: 12px;
-            margin-top: 16px;
-            flex-wrap: wrap;
-        }
-
-        .payment-icon {
-            width: 50px;
-            height: 32px;
-            background: #fff;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-        }
-
-        /* Footer Bottom */
         .footer-bottom {
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 24px;
+            background: var(--amazon-dark);
+            padding: 30px 16px;
             text-align: center;
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 14px;
+            border-top: 1px solid #3a4553;
         }
 
         .footer-bottom-content {
-            max-width: 1400px;
+            max-width: 1500px;
             margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 16px;
+        }
+
+        .footer-logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 16px;
         }
 
         .footer-links {
             display: flex;
+            justify-content: center;
             gap: 20px;
             flex-wrap: wrap;
+            margin-bottom: 16px;
         }
 
         .footer-links a {
-            color: rgba(255, 255, 255, 0.6);
+            color: #ddd;
             text-decoration: none;
-            font-size: 13px;
+            font-size: 12px;
         }
 
         .footer-links a:hover {
-            color: #fff;
+            text-decoration: underline;
         }
 
-        /* Responsive Design */
+        .copyright {
+            color: #ddd;
+            font-size: 12px;
+        }
+
+        /* Responsive */
         @media (max-width: 1024px) {
-            .nav-main {
+            .header-top {
                 flex-wrap: wrap;
-                gap: 16px;
             }
 
-            .search-container {
+            .search-wrapper {
                 order: 3;
-                flex: 1 1 100%;
-                max-width: 100%;
+                width: 100%;
             }
 
-            .nav-actions {
-                gap: 8px;
-            }
-
-            .nav-item span {
+            .deliver-to,
+            .header-link-top {
                 display: none;
             }
         }
 
         @media (max-width: 768px) {
-            .footer-content {
-                grid-template-columns: 1fr 1fr;
-                text-align: center;
-            }
-
-            .social-links {
-                justify-content: center;
-            }
-
-            .newsletter-form {
-                flex-direction: column;
-            }
-
-            .footer-bottom-content {
-                flex-direction: column;
-                text-align: center;
-            }
-        }
-
-        @media (max-width: 600px) {
-            .search-box {
-                flex-direction: column;
-            }
-
-            .search-box input,
-            .search-box button {
-                width: 100%;
-            }
-
-            .footer-content {
-                grid-template-columns: 1fr;
+            .nav-categories {
+                display: none;
             }
 
             .product-grid {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+                gap: 12px;
+            }
+
+            .product-image {
+                height: 180px;
+            }
+
+            .footer-content {
                 grid-template-columns: 1fr;
+                text-align: center;
             }
         }
+
+        .deliver-to {
+    display: inline-block;
+    cursor: pointer;
+    padding: 8px 12px;
+    background-color: #f3f3f3;
+    border-radius: 6px;
+    font-family: Arial, sans-serif;
+}
+
+.deliver-label {
+    font-size: 12px;
+    color: #555;
+    display: block;
+}
+
+.deliver-location {
+    font-size: 14px;
+    font-weight: bold;
+    color: #111;
+}
+
+.deliver-location i {
+    color: #ff6f00;
+    margin-right: 5px;
+}
+
+/* Popup */
+.popup-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-box {
+    background: #fff;
+    padding: 20px;
+    width: 300px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.popup-box input {
+    width: 100%;
+    padding: 8px;
+    margin: 10px 0;
+}
+
+.popup-actions button {
+    padding: 8px 12px;
+    margin: 5px;
+    border: none;
+    cursor: pointer;
+}
+
+.popup-actions button:first-child {
+    background-color: #28a745;
+    color: white;
+}
+
+.popup-actions .cancel {
+    background-color: #ccc;
+}
+
 
         {% block extra_css %}{% endblock %}
     </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="top-bar">
-            <div class="top-bar-content">
-                <div class="announcement">
-                    <span class="announcement-icon">🎉</span>
-                    <span>Free Shipping on orders over $50!</span>
-                </div>
-                <div class="top-bar-links">
-                    <a href="#">Help Center</a>
-                    <a href="#">Track Order</a>
-                    <a href="#">Daily Deals</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="nav-main">
+    <!-- Main Header -->
+    <header class="main-header">
+        <div class="header-top">
+            <!-- Logo -->
             <a href="{% url 'home' %}" class="logo">
-                <div class="logo-icon">🛍️</div>
-                <span>ShopHub</span>
+                <span class="logo-text">ShopHub<span class="dot">.in</span></span>
             </a>
 
-            <div class="search-container">
-                <form action="{% url 'home' %}" method="GET" class="search-box">
-                    <input type="text" name="q" placeholder="Search for products..." value="{{ request.GET.q }}">
-                    <button type="submit">Search</button>
+           <!-- Deliver To Section -->
+<!-- <div class="deliver-to" onclick="openLocationPopup()">
+    <span class="deliver-label">Deliver to</span>
+    <span class="deliver-location">
+        <i class="fas fa-map-marker-alt"></i>
+        <span id="locationText">Salem 636004</span>
+    </span>
+</div> -->
+
+<!-- Popup Modal -->
+<div id="locationPopup" class="popup-overlay">
+    <div class="popup-box">
+        <h3>Change Delivery Location</h3>
+        <input type="text" id="newLocation" placeholder="Enter your location">
+        <div class="popup-actions">
+            <button onclick="saveLocation()">Save</button>
+            <button class="cancel" onclick="closePopup()">Cancel</button>
+        </div>
+    </div>
+</div>
+
+
+            <!-- Search Bar -->
+            <div class="search-wrapper">
+                <form action="{% url 'home' %}" method="GET">
+                    <div class="search-container">
+                        <select class="search-category" name="category">
+                            <option value="">All</option>
+                            {% if categories %}
+                                {% for category in categories %}
+                                    <option value="{{ category.id }}">{{ category.name }}</option>
+                                {% endfor %}
+                            {% endif %}
+                        </select>
+                        <input type="text" class="search-input" name="q" placeholder="Search ShopHub" value="{{ request.GET.q }}">
+                        <button type="submit" class="search-button">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
                 </form>
             </div>
 
-            <div class="nav-actions">
-                {% if user.is_authenticated %}
-                    <a href="{% url 'my_recommendations' %}" class="nav-item nav-item-special">
-                        <div class="nav-item-icon">🎯</div>
-                        <span>For You</span>
-                    </a>
-                    <a href="{% url 'my_recommendations' %}" class="nav-item">
-                        <div class="nav-item-icon">👤</div>
-                        <span>{{ user.username }}</span>
-                    </a>
-                    <a href="{% url 'logout' %}" class="nav-item">
-                        <div class="nav-item-icon">🚪</div>
-                        <span>Logout</span>
-                    </a>
-                {% else %}
-                    <a href="/accounts/login/" class="nav-item">
-                        <div class="nav-item-icon">🔑</div>
-                        <span>Login</span>
-                    </a>
-                {% endif %}
-                
-                <a href="{% url 'wishlist' %}" class="nav-item">
-                    <div class="nav-item-icon">
-                        ❤️
-                        {% if wishlist_count > 0 %}
-                            <span class="badge">{{ wishlist_count }}</span>
-                        {% endif %}
-                    </div>
-                    <span>Wishlist</span>
-                </a>
+            
 
-                <a href="{% url 'cart' %}" class="nav-item">
-                    <div class="nav-item-icon">🛒</div>
-                    <span>Cart</span>
+            <!-- Account & Lists -->
+            {% if user.is_authenticated %}
+                <a href="{% url 'my_recommendations' %}" class="header-link">
+                    <span class="header-link-top">Hello, {{ user.username }}</span>
+                    <span class="header-link-bottom">
+                        Account & Lists <i class="fas fa-caret-down"></i>
+                    </span>
+                </a>
+            {% else %}
+                <a href="{% url 'login' %}" class="header-link">
+                    <span class="header-link-top">Hello, sign in</span>
+                    <span class="header-link-bottom">
+                        Account & Lists <i class="fas fa-caret-down"></i>
+                    </span>
+                </a>
+            {% endif %}
+
+            <!-- Returns & Orders -->
+            <a href="#" class="returns-orders">
+                <span class="header-link-top">Returns</span>
+                <span class="header-link-bottom">& Orders</span>
+            </a>
+
+            <!-- Wishlist -->
+            <a href="{% url 'wishlist' %}" class="header-link">
+                <span class="header-link-top">Your</span>
+                <span class="header-link-bottom">
+                    <i class="fas fa-heart"></i> Wishlist
+                </span>
+            </a>
+
+            <!-- Cart -->
+            <a href="{% url 'cart' %}" class="cart-link">
+                <div class="cart-icon-wrapper">
+                    <i class="fas fa-shopping-cart"></i>
                     {% if cart_count > 0 %}
-                        <span class="badge">{{ cart_count }}</span>
+                        <span class="cart-count">{{ cart_count }}</span>
                     {% endif %}
-                </a>
-            </div>
+                </div>
+                <span class="cart-text">Cart</span>
+            </a>
         </div>
+    </header>
 
-        <div class="categories-bar">
-            <div class="categories-content">
+    <!-- Secondary Navigation -->
+    <nav class="nav-secondary">
+        <div class="nav-secondary-content">
+            <button class="nav-menu-button">
+                <i class="fas fa-bars"></i>
+                All
+            </button>
+
+            <div class="nav-categories">
                 {% if categories %}
                     {% for category in categories %}
-                        <a href="{% url 'category_products' category.id %}" class="category-link">{{ category.name }}</a>
+                        <a href="{% url 'category_products' category.id %}" class="nav-category">{{ category.name }}</a>
                     {% endfor %}
                 {% else %}
-                    <a href="{% url 'home' %}" class="category-link">All Products</a>
+                    <a href="{% url 'home' %}" class="nav-category">Today's Deals</a>
+                    <a href="#" class="nav-category">Customer Service</a>
+                    <a href="#" class="nav-category">Registry</a>
+                    <a href="#" class="nav-category">Gift Cards</a>
+                    <a href="#" class="nav-category">Sell</a>
                 {% endif %}
             </div>
         </div>
     </nav>
 
+    <!-- Messages -->
     {% if messages %}
     <div class="messages">
         {% for message in messages %}
             <div class="alert alert-{{ message.tags }}">
-                <span style="font-size: 18px;">
-                    {% if message.tags == 'success' %}✓{% elif message.tags == 'error' %}✕{% elif message.tags == 'warning' %}⚠{% else %}ℹ{% endif %}
+                <span>
+                    {% if message.tags == 'success' %}<i class="fas fa-check-circle"></i>
+                    {% elif message.tags == 'error' %}<i class="fas fa-exclamation-circle"></i>
+                    {% elif message.tags == 'warning' %}<i class="fas fa-exclamation-triangle"></i>
+                    {% else %}<i class="fas fa-info-circle"></i>{% endif %}
                 </span>
                 {{ message }}
             </div>
@@ -847,108 +845,98 @@
     </div>
     {% endif %}
 
+    <!-- Main Content -->
     <main class="main-container">
         {% block content %}{% endblock %}
     </main>
 
+    <!-- Footer -->
     <footer class="footer">
-        <!-- Newsletter Section with Background Image -->
-        <div class="footer-newsletter">
-            <div class="newsletter-content">
-                <h2 class="newsletter-title">Stay Updated</h2>
-                <p class="newsletter-subtitle">Subscribe to get special offers, free giveaways, and exclusive deals</p>
-                <form class="newsletter-form">
-                    <input type="email" placeholder="Enter your email address" required>
-                    <button type="submit">Subscribe</button>
-                </form>
-            </div>
+        <div class="footer-top">
+            <a href="#top">Back to top</a>
         </div>
 
         <div class="footer-content">
             <div class="footer-section">
-                <h3>About ShopHub</h3>
+                <h3>Get to Know Us</h3>
                 <ul>
                     <li><a href="#">About Us</a></li>
                     <li><a href="#">Careers</a></li>
-                    <li><a href="#">Press</a></li>
-                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Press Releases</a></li>
+                    <li><a href="#">ShopHub Science</a></li>
                 </ul>
             </div>
 
             <div class="footer-section">
-                <h3>Customer Service</h3>
+                <h3>Connect with Us</h3>
                 <ul>
-                    <li><a href="#">Contact Us</a></li>
-                    <li><a href="#">FAQ</a></li>
-                    <li><a href="#">Shipping Info</a></li>
-                    <li><a href="#">Returns & Exchanges</a></li>
+                    <li><a href="#">Facebook</a></li>
+                    <li><a href="#">Twitter</a></li>
+                    <li><a href="#">Instagram</a></li>
                 </ul>
             </div>
 
             <div class="footer-section">
-                <h3>My Account</h3>
+                <h3>Make Money with Us</h3>
                 <ul>
-                    {% if user.is_authenticated %}
-                        <li><a href="{% url 'my_recommendations' %}">My Recommendations</a></li>
-                        <li><a href="{% url 'wishlist' %}">Wishlist</a></li>
-                        <li><a href="{% url 'cart' %}">Shopping Cart</a></li>
-                        <li><a href="{% url 'logout' %}">Logout</a></li>
-                    {% else %}
-                        <li><a href="/accounts/login/">Login</a></li>
-                        <li><a href="#">Register</a></li>
-                    {% endif %}
+                    <li><a href="#">Sell on ShopHub</a></li>
+                    <li><a href="#">Become an Affiliate</a></li>
+                    <li><a href="#">Advertise Your Products</a></li>
                 </ul>
             </div>
 
             <div class="footer-section">
-                <h3>Connect With Us</h3>
-                <div class="social-links">
-                    <a href="https://www.facebook.com" target="_blank" class="social-link" style="font-size: 20px;display: flex;align-items: center;justify-content: center;">
-                        <i class="fab fa-facebook-f"></i>
-                    </a>
-                    <a href="https://www.facebook.com" target="_blank" class="social-link" style="font-size: 20px;display: flex;align-items: center;justify-content: center;">
-                        <i class="fab fa-twitter"></i>
-                    </a>
-                    <a href="https://www.facebook.com" target="_blank" class="social-link" style="font-size: 20px;display: flex;align-items: center;justify-content: center;">
-                        <i class="fab fa-instagram"></i>
-                    </a>
-                    <a href="https://www.facebook.com" target="_blank" class="social-link" style="font-size: 20px;display: flex;align-items: center;justify-content: center;">
-                        <i class="fab fa-linkedin-in"></i>
-                    </a>
-                </div>
-                <h3 style="margin-top: 24px;">We Accept</h3>
-                <div class="payment-methods">
-                    <div class="payment-icon" title="Visa">💳</div>
-                    <div class="payment-icon" title="Mastercard">💳</div>
-                    <div class="payment-icon" title="PayPal">💰</div>
-                    <div class="payment-icon" title="American Express">💳</div>
-                </div>
+                <h3>Let Us Help You</h3>
+                <ul>
+                    <li><a href="#">Your Account</a></li>
+                    <li><a href="#">Returns Centre</a></li>
+                    <li><a href="#">100% Purchase Protection</a></li>
+                    <li><a href="#">Help</a></li>
+                </ul>
             </div>
         </div>
 
         <div class="footer-bottom">
             <div class="footer-bottom-content">
-                <p>&copy; {% now "Y" %} ShopHub. All rights reserved.</p>
+                <div class="footer-logo">ShopHub.in</div>
                 <div class="footer-links">
-                    <a href="#">Privacy Policy</a>
-                    <a href="#">Terms of Service</a>
-                    <a href="#">Cookie Policy</a>
-                    <a href="#">Accessibility</a>
+                    <a href="#">Conditions of Use & Sale</a>
+                    <a href="#">Privacy Notice</a>
+                    <a href="#">Interest-Based Ads</a>
                 </div>
+                <p class="copyright">© {% now "Y" %} ShopHub.in. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
     <script>
-        setTimeout(() => {
-            document.querySelectorAll('.alert').forEach(el => {
-                el.style.transition = 'all 0.5s';
-                el.style.opacity = '0';
-                el.style.transform = 'translateX(100%)';
-                setTimeout(() => el.remove(), 500);
-            });
-        }, 5000);
-        {% block extra_js %}{% endblock %}
-    </script>
+function openLocationPopup() {
+    document.getElementById("locationPopup").style.display = "flex";
+}
+
+function closePopup() {
+    document.getElementById("locationPopup").style.display = "none";
+}
+
+function saveLocation() {
+    const location = document.getElementById("newLocation").value;
+    if (location.trim() !== "") {
+        document.getElementById("locationText").innerText = location;
+        localStorage.setItem("deliveryLocation", location);
+    }
+    closePopup();
+}
+
+// Load saved location on page load
+window.onload = function () {
+    const savedLocation = localStorage.getItem("deliveryLocation");
+    if (savedLocation) {
+        document.getElementById("locationText").innerText = savedLocation;
+    }
+};
+</script>
+
+
+    {% block extra_js %}{% endblock %}
 </body>
 </html>
