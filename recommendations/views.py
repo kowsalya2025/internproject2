@@ -117,52 +117,6 @@ def product_detail(request, product_id):
 
 
 
-# def product_detail(request, product_id):
-#     """Enhanced product detail page"""
-#     product = get_object_or_404(Product, id=product_id)
-    
-#     # Track product view
-#     if request.user.is_authenticated:
-#         ProductView.objects.create(user=request.user, product=product)
-    
-#     # Get cart info
-#     cart_count = 0
-#     if request.user.is_authenticated:
-#         cart, _ = Cart.objects.get_or_create(user=request.user)
-#         cart_count = cart.items.count()
-    
-#     # Get recommendations
-#     engine = RecommendationEngine()
-#     if request.user.is_authenticated:
-#         recommendations = engine.get_hybrid_recommendations(request.user.id, n=6)
-#     else:
-#         recommendations = engine.get_content_based_recommendations(product_id, n=6)
-    
-#     # Get similar products (same category)
-#     similar_products = Product.objects.filter(
-#         category=product.category
-#     ).exclude(id=product_id)[:4]
-    
-#     # Get user's rating if exists
-#     user_rating = None
-#     if request.user.is_authenticated:
-#         try:
-#             user_rating = Rating.objects.get(user=request.user, product=product)
-#         except Rating.DoesNotExist:
-#             pass
-    
-#     # Get all ratings for this product
-#     ratings = Rating.objects.filter(product=product).order_by('-created_at')[:5]
-    
-#     context = {
-#         'product': product,
-#         'recommendations': recommendations,
-#         'similar_products': similar_products,
-#         'user_rating': user_rating,
-#         'ratings': ratings,
-#         'cart_count': cart_count,
-#     }
-#     return render(request, 'recommendations/product_detail.html', context)
 
 
 @login_required

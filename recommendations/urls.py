@@ -13,7 +13,8 @@ urlpatterns = [
     path('category/<int:category_id>/', views.category_products, name='category_products'),
     
     # User recommendations
-    path('my_recommendations/', views.my_recommendations, name='my_recommendations'),
+    path('my-recommendations/', views.my_recommendations, name='my_recommendations'),
+
     
     # Rating
     path('product/<int:product_id>/rate/', views.rate_product, name='rate_product'),
